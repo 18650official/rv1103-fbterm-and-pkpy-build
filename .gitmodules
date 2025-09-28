@@ -1,0 +1,6 @@
+[submodule "fbterm-truecolor"]
+	path = fbterm-truecolor
+	url = https://github.com/18650official/fbterm-truecolor
+[submodule "pocketpy"]
+	path = pocketpy
+	url = https://github.com/pocketpy/pocketpy.git

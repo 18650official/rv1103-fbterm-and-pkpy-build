@@ -1,8 +1,0 @@
--Wall
--W*
--xc
--std=c11
--Iinclude/
--I3rd/lz4/
--I3rd/libhv/include/
--I3rd/cute_headers/include/

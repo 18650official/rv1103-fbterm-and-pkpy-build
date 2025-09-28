@@ -236,8 +236,8 @@ echo "======== PocketPy 编译完成. ========"
 # --- 编译 fbterm ---
 ( # 使用子 shell 来隔离 fbterm 的特殊环境变量
     echo ""
-    echo "======== 5.7 正在编译 fbterm-1.7 ========"
-    cd "${BUILD_DIR}/fbterm-1.7"
+    echo "======== 5.7 正在编译 fbterm-truecolor ========"
+    cd "${BUILD_DIR}/fbterm-truecolor"
     make clean &> /dev/null || true
 
     # --- 最终修正：为 fbterm 运行 autoreconf ---
@@ -252,7 +252,7 @@ echo "======== PocketPy 编译完成. ========"
     ./configure --prefix="${INSTALL_DIR}" --host="${TARGET_HOST}"
     make -j$(nproc)
 
-    echo "fbterm 可执行文件位于: ${BUILD_DIR}/fbterm-1.7/src/fbterm"
+    echo "fbterm 可执行文件位于: ${BUILD_DIR}/fbterm-truecolor/src/fbterm"
     cd "${BUILD_DIR}"
     echo "======== fbterm 编译完成. ========"
 )
@@ -262,7 +262,7 @@ echo "================================================================="
 echo "所有项目编译成功!"
 echo "所有依赖库已安装到: ${INSTALL_DIR}"
 echo "PocketPy 可执行文件为: ${BUILD_DIR}/pocketpy/build/main"
-echo "fbterm 可执行文件为: ${BUILD_DIR}/fbterm-1.7/src/fbterm"
+echo "fbterm 可执行文件为: ${BUILD_DIR}/fbterm-truecolor/src/fbterm"
 
 # -----------------------------------------------------------------------
 # pack
@@ -280,7 +280,7 @@ echo "====== 6.2 正在导出可执行文件... ======"
 
 # 导出 fbterm
 echo "  -> 正在复制 fbterm..."
-cp -f "${BUILD_DIR}/fbterm-1.7/src/fbterm" "${EXPORT_DIR}/usr/bin/"
+cp -f "${BUILD_DIR}/fbterm-truecolor/src/fbterm" "${EXPORT_DIR}/usr/bin/"
 
 # 导出 pocketpy (将 build/main 复制并重命名为 pocketpy)
 echo "  -> 正在复制并重命名 pocketpy..."

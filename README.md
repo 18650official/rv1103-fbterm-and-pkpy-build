@@ -25,7 +25,7 @@
 
 | 文件/目录 | 功能说明 |
 | :--- | :--- |
-| `fbterm-1.7/` | Framebuffer 终端 (`fbterm`) 源码 |
+| `fbterm-truecolor/` | Framebuffer 终端 (`fbterm`) 源码 |
 | `pocketpy/` | PocketPy Python 解释器源码 |
 | `zlib-1.3.1/` 等 | 各依赖库源码 (zlib, expat, freetype...) |
 | `dep/` | 静态资源文件（模拟目标设备目录结构） |

@@ -23,7 +23,7 @@ rm -f toolchain.cmake
 echo "Top-level directories and files removed."
 
 # 2. Clean Autotools-based projects
-AUTOTOOLS_DIRS="zlib-1.3.1 expat-2.7.1 libiconv-1.7 freetype-2.10.0 fontconfig-2.16.0 fbterm-1.7"
+AUTOTOOLS_DIRS="zlib-1.3.1 expat-2.7.1 libiconv-1.7 freetype-2.10.0 fontconfig-2.16.0 fbterm-truecolor"
 echo ""
 echo "--> Cleaning individual Autotools project directories..."
 for dir in $AUTOTOOLS_DIRS; do
