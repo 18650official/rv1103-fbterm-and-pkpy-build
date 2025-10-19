@@ -257,8 +257,8 @@ echo "======== PocketPy compilation finished. ========"
 # --- Compile fbterm ---
 ( # Use a subshell to isolate fbterm's special environment variables
     echo ""
-    echo "======== 5.7 Compiling fbterm-1.7 ========"
-    cd "${BUILD_DIR}/fbterm-1.7"
+    echo "======== 5.7 Compiling fbterm-truecolor ========"
+    cd "${BUILD_DIR}/fbterm-truecolor"
     make clean &> /dev/null || true
 
     # --- Final fix: Run autoreconf for fbterm ---
@@ -280,7 +280,7 @@ echo "======== PocketPy compilation finished. ========"
     ./configure --prefix=/usr --host="${TARGET_HOST}"
     make -j$(nproc)
 
-    echo "fbterm executable is at: ${BUILD_DIR}/fbterm-1.7/src/fbterm"
+    echo "fbterm executable is at: ${BUILD_DIR}/fbterm-truecolor/src/fbterm"
     cd "${BUILD_DIR}"
     echo "======== fbterm compilation finished. ========"
 )
@@ -290,7 +290,7 @@ echo "================================================================="
 echo "All projects compiled successfully!"
 echo "All dependency libraries are installed in: ${INSTALL_DIR}"
 echo "PocketPy executable is: ${BUILD_DIR}/pocketpy/build/main"
-echo "fbterm executable is: ${BUILD_DIR}/fbterm-1.7/src/fbterm"
+echo "fbterm executable is: ${BUILD_DIR}/fbterm-truecolor/src/fbterm"
 
 # -----------------------------------------------------------------------
 # pack
@@ -308,7 +308,7 @@ echo "====== 6.2 Exporting executables... ======"
 
 # Export fbterm
 echo "  -> Copying fbterm..."
-cp -f "${BUILD_DIR}/fbterm-1.7/src/fbterm" "${EXPORT_DIR}/usr/bin/"
+cp -f "${BUILD_DIR}/fbterm-truecolor/src/fbterm" "${EXPORT_DIR}/usr/bin/"
 
 # Export pocketpy (copy and rename build/main to pocketpy)
 echo "  -> Copying and renaming pocketpy..."
