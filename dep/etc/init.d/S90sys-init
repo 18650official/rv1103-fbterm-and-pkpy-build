@@ -1,0 +1,115 @@
+#!/bin/sh
+#
+# S90system-setup: Set up system-level resources.
+# This script provides a temporary perfect solution that uses a script-based
+# approach to mount USB mass storage, with a robust shutdown sequence.
+#
+
+NAME="System Setup"
+IMAGE_FILE="/root/mass.img"
+SWAP_FILE="/root/swapfile"
+
+# --- USB Gadget Configuration (for shutdown) ---
+GADGET_GROUP="rockchip"
+GADGET_DIR="/sys/kernel/config/usb_gadget/${GADGET_GROUP}"
+CONFIG_NAME="b.1"
+CONFIG_DIR="${GADGET_DIR}/configs/${CONFIG_NAME}"
+MASS_FUNCTION_DIR="${GADGET_DIR}/functions/mass_storage.0"
+
+log() {
+    echo "S90system-setup: $1"
+}
+
+do_start() {
+    log "Starting system setup..."
+
+    # Load necessary kernel modules
+    lsmod | grep -q zram || insmod /oem/usr/ko/zram.ko
+    lsmod | grep -q uinput || insmod /oem/usr/ko/uinput.ko
+
+    # Configure ZRAM Swap
+    if [ -b /dev/zram0 ] && ! grep -q '/dev/zram0' /proc/swaps; then
+        log "Configuring ZRAM swap..."
+        echo 64M > /sys/block/zram0/disksize
+        mkswap /dev/zram0
+        swapon /dev/zram0
+    fi
+
+    # Activate file-based Swap
+    if [ -f "$SWAP_FILE" ] && ! grep -q "$SWAP_FILE" /proc/swaps; then
+        log "Activating file swap..."
+        swapon "$SWAP_FILE"
+    fi
+
+    # --- Optional USB Mass Storage Start ---
+    # Only run the script if it exists and is executable.
+    if [ -x "/usr/local/bin/init_mass.sh" ]; then
+        log "Executing /usr/local/bin/init_mass.sh to start USB mass storage..."
+        /usr/local/bin/init_mass.sh
+    else
+        log "Skipping USB mass storage (script not found or not executable)."
+    fi
+    
+    log "System setup finished."
+}
+
+do_stop() {
+    log "Stopping system services..."
+    
+    # --- Robust USB Gadget Shutdown ---
+    # This sequence attempts to cleanly shut down the gadget before unmounting filesystems.
+    log "Attempting to stop USB mass storage gadget..."
+    if [ -d "$GADGET_DIR" ]; then
+        # 1. Unbind the gadget from the USB controller FIRST to stop hardware activity.
+        if [ -f "$GADGET_DIR/UDC" ] && [ -n "$(cat $GADGET_DIR/UDC)" ]; then
+            log "Unbinding UDC..."
+            echo "" > "$GADGET_DIR/UDC"
+        fi
+        
+        # 2. Remove the function link from the configuration.
+        if [ -L "$CONFIG_DIR/mass_storage.0" ]; then
+            log "Removing function link..."
+            rm "$CONFIG_DIR/mass_storage.0"
+        fi
+
+        # 3. Clear the backing file from the LUN to release the lock.
+        if [ -f "$MASS_FUNCTION_DIR/lun.0/file" ]; then
+            log "Releasing backing file..."
+            echo "" > "$MASS_FUNCTION_DIR/lun.0/file"
+        fi
+        
+        sleep 1 # Give the system a moment to process the changes.
+    fi
+
+    # Deactivate Swap devices
+    log "Deactivating swap devices..."
+    if grep -q "$SWAP_FILE" /proc/swaps; then
+        swapoff "$SWAP_FILE"
+    fi
+    if grep -q '/dev/zram0' /proc/swaps; then
+        swapoff /dev/zram0
+    fi
+    
+    log "Stopped."
+}
+
+case "$1" in
+  start)
+    do_start
+    ;;
+  stop)
+    do_stop
+    ;;
+  restart)
+    do_stop
+    sleep 1
+    do_start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit 0
+
+

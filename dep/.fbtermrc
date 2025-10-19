@@ -1,0 +1,44 @@
+# ~/.fbtermrc
+#
+# Configuration file for FbTerm.
+
+# Set the font family and size.
+# 'monospace' will be resolved by fontconfig according to your rules
+# in /etc/fonts/conf.d/10-local.conf, using Cascadia Mono for English
+# and Microsoft YaHei for Chinese characters.
+font-family=monospace
+font-size=19
+
+# Set the text encoding to UTF-8 to correctly display multi-byte characters
+# like Chinese. This is crucial.
+text-encodings=UTF-8
+
+#font-width=
+#font-height=
+
+# default color of foreground/background text
+# available colors: 0 = black, 1 = red, 2 = green, 3 = brown, 4 = blue, 5 = magenta, 6 = cyan, 7 = white
+color-foreground=7
+color-background=0
+
+# max scroll-back history lines of every window, value must be [0 - 65535], 0 means disable it
+history-lines=1000
+
+# cursor shape: 0 = underline, 1 = block
+# cursor flash interval in milliseconds, 0 means disable flashing
+cursor-shape=0
+cursor-interval=500
+
+# additional ascii chars considered as part of a word while auto-selecting text, except ' ', 0-9, a-z, A-Z
+word-chars=._-
+
+# change the clockwise orientation angle of screen display
+# available values: 0 = 0 degree, 1 = 90 degrees, 2 = 180 degrees, 3 = 270 degrees
+screen-rotate=0
+
+# specify the favorite input method program to run
+input-method=
+
+# treat ambiguous width characters as wide
+#ambiguous-wide=yes
+

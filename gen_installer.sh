@@ -1,86 +1,86 @@
 #!/bin/bash
 
 # =================================================================
-# Luckfox Pico 项目部署包生成脚本 (v3 - 包含权限自动处理)
+# Luckfox Pico Project Deployment Package Generation Script (v3 - with auto permissions)
 #
-# 该脚本会执行以下操作:
-# 1. 创建一个临时的根文件系统目录。
-# 2. 将 'dep' 和 'output' 目录的内容合并进去。
-# 3. 在打包前，为所有可执行文件和脚本智能地设置 +x 权限。
-# 4. 将临时目录打包成一个保留权限的 'update.tar' 文件。
-# 5. 生成一个在目标板上运行的、带权限校验的智能安装脚本 'install.sh'。
-# 6. 将最终产物放置在 'install/' 目录。
+# This script performs the following actions:
+# 1. Creates a temporary root filesystem directory.
+# 2. Merges the contents of the 'dep' and 'output' directories into it.
+# 3. Intelligently sets +x permissions for all executables and scripts before packaging.
+# 4. Packages the temporary directory into an 'update.tar' file that preserves permissions.
+# 5. Generates a smart installation script 'install.sh' with permission checks to be run on the target device.
+# 6. Places the final artifacts into the 'install/' directory.
 # =================================================================
 
 set -eu
 
-# --- 变量定义 ---
+# --- Variable Definitions ---
 BUILD_DIR=$(pwd)
 OUTPUT_DIR="${BUILD_DIR}/output"
 DEP_DIR="${BUILD_DIR}/dep"
 PACKAGE_DIR="${BUILD_DIR}/install"
-PACKAGE_ROOT="${BUILD_DIR}/package_root" # 用于合并文件的临时目录
+PACKAGE_ROOT="${BUILD_DIR}/package_root" # Temporary directory for merging files
 TAR_FILE="${PACKAGE_DIR}/update.tar"
 INSTALL_SCRIPT="${PACKAGE_DIR}/install.sh"
 
-# --- 检查源目录是否存在 ---
+# --- Check if source directories exist ---
 if [ ! -d "${OUTPUT_DIR}" ]; then
-    echo "错误: 'output' 目录不存在。请先运行编译脚本。"
+    echo "Error: 'output' directory not found. Please run the build script first."
     exit 1
 fi
 if [ ! -d "${DEP_DIR}" ]; then
-    echo "错误: 'dep' 目录不存在。"
+    echo "Error: 'dep' directory not found."
     exit 1
 fi
 
 
-# --- 1. 清理并创建打包目录 ---
-echo "====== 1. 正在准备打包环境... ======"
+# --- 1. Clean and create packaging directories ---
+echo "====== 1. Preparing packaging environment... ======"
 rm -rf "${PACKAGE_ROOT}" "${PACKAGE_DIR}"
 mkdir -p "${PACKAGE_ROOT}"
 mkdir -p "${PACKAGE_DIR}"
-echo "临时目录 '${PACKAGE_ROOT}' 和输出目录 '${PACKAGE_DIR}' 已准备就绪。"
+echo "Temporary directory '${PACKAGE_ROOT}' and output directory '${PACKAGE_DIR}' are ready."
 echo ""
 
 
-# --- 2. 合并文件 ---
-echo "====== 2. 正在合并 'dep' 和 'output' 目录... ======"
+# --- 2. Merge files ---
+echo "====== 2. Merging 'dep' and 'output' directories... ======"
 rsync -a "${DEP_DIR}/" "${PACKAGE_ROOT}/"
 rsync -a "${OUTPUT_DIR}/" "${PACKAGE_ROOT}/"
-echo "文件合并完成。"
+echo "File merge complete."
 echo ""
 
 
-# --- 3. 在打包前，预设文件权限 ---
-echo "====== 3. 正在预设可执行文件权限... ======"
-# 为我们编译的主要程序赋予可执行权限
+# --- 3. Pre-set file permissions before packaging ---
+echo "====== 3. Pre-setting executable permissions... ======"
+# Grant executable permissions to our main compiled programs
 chmod +x "${PACKAGE_ROOT}/usr/bin/fbterm"
 chmod +x "${PACKAGE_ROOT}/usr/bin/pocketpy"
 chmod +x "${PACKAGE_ROOT}/usr/bin/fc-"*
 
-# 递归查找所有 .sh 脚本并赋予可执行权限
+# Recursively find all .sh scripts and grant them executable permissions
 find "${PACKAGE_ROOT}" -type f -name "*.sh" -exec chmod +x {} \;
-echo "权限预设完成。"
+echo "Permissions pre-set."
 echo ""
 
 
-# --- 4. 打包成 Tar 文件 ---
-echo "====== 4. 正在将合并后的文件打包成 ${TAR_FILE}... ======"
-# 使用 -p 参数来确保文件权限被完整保留
+# --- 4. Package into a Tar file ---
+echo "====== 4. Packaging merged files into ${TAR_FILE}... ======"
+# Use the -p flag to ensure file permissions are fully preserved
 tar -cpf "${TAR_FILE}" -C "${PACKAGE_ROOT}" .
-echo "打包完成。"
+echo "Packaging complete."
 echo ""
 
 
-# --- 5. 清理临时目录 ---
-echo "====== 5. 正在清理临时文件... ======"
+# --- 5. Clean up temporary directory ---
+echo "====== 5. Cleaning up temporary files... ======"
 rm -rf "${PACKAGE_ROOT}"
-echo "清理完成。"
+echo "Cleanup complete."
 echo ""
 
 
-# --- 6. 生成一键安装脚本 (install.sh) ---
-echo "====== 6. 正在生成目标板安装脚本 (install.sh)... ======"
+# --- 6. Generate one-click installation script (install.sh) ---
+echo "====== 6. Generating target device installation script (install.sh)... ======"
 cat << 'EOF' > "${INSTALL_SCRIPT}"
 #!/bin/sh
 # =================================================
@@ -110,13 +110,13 @@ echo "Old /etc directories removed."
 
 # 2. Extract the archive to the root filesystem
 echo "--> Extracting update.tar to root filesystem (preserving permissions)..."
-# 使用 -p 参数来确保从压缩包中恢复权限
+# Use the -p flag to ensure permissions are restored from the archive
 tar -xpf update.tar -C /
 echo "Extraction complete."
 
 # 3. Failsafe: Ensure all shell scripts are executable
 echo "--> Verifying executable permissions for shell scripts..."
-# 遍历关键目录，为所有 .sh 文件再次确保 +x 权限
+# Iterate through key directories and ensure +x permission for all .sh files again
 find /etc /oem /root /usr -type f -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
 echo "Permissions verified."
 
@@ -154,24 +154,24 @@ echo "====== System Update & Setup Complete! A reboot is recommended. ======"
 EOF
 
 chmod +x "${INSTALL_SCRIPT}"
-echo "安装脚本 'install.sh' 生成完毕。"
+echo "Installation script 'install.sh' generated."
 echo ""
 
 
-# --- 7. 打印最终的部署说明 ---
+# --- 7. Print final deployment instructions ---
 echo "================================================================="
-echo "✅ 部署包已成功创建！"
+echo "✅ Deployment package created successfully!"
 echo ""
-echo "下一步，请按照以下步骤在 Luckfox Pico 开发板上进行部署："
+echo "Next, please follow these steps to deploy on your Luckfox Pico board:"
 echo ""
-echo "1. 将 'install' 目录下的所有文件 (update.tar 和 install.sh)，通过 scp 或其他方式，上传到板子的某个临时目录（例如 /tmp）:"
+echo "1. Upload all files from the 'install' directory (update.tar and install.sh) to a temporary directory on the board (e.g., /tmp) using scp or another method:"
 echo ""
-echo "   示例 scp 命令 (请将 <board_ip> 替换为板子的实际IP):"
+echo "   Example scp command (please replace <board_ip> with the board's actual IP):"
 echo "   scp install/* root@<board_ip>:/tmp/"
 echo ""
-echo "2. SSH 登录到你的开发板，然后执行以下命令："
+echo "2. SSH into your board, then execute the following commands:"
 echo "   cd /tmp"
 echo "   ./install.sh"
 echo ""
-echo "3. 脚本会自动完成所有部署工作并自我清理。完成后，建议重启开发板。"
+echo "3. The script will automatically handle all deployment tasks and clean up after itself. A reboot is recommended upon completion."
 echo "================================================================="
