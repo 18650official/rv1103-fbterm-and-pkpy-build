@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+# S01environment: Set up global environment variables for all processes.
+#
+
+# Ensure the fontconfig cache directory exists and is writable.
+# This prevents the "No writable cache directories" error.
+if [ ! -d /var/cache/fontconfig ]; then
+    mkdir -p /var/cache/fontconfig
+fi
+chmod 777 /var/cache/fontconfig
+
+if [ ! -d /.cache/fontconfig ]; then
+    mkdir -p /.cache/fontconfig
+fi
+chmod 777 /.cache/fontconfig
+
+# Export the path to the main fontconfig file.
+# This makes fontconfig work correctly for all system services,
+# including those running during startup and shutdown.
+export FONTCONFIG_FILE=/etc/fonts/fonts.conf
+
+echo "Global fontconfig environment set."
+
+

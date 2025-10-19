@@ -1,0 +1,84 @@
+#!/bin/sh
+#
+# S99fbterm: Start/Stop the Framebuffer Terminal (FbTerm)
+#
+
+NAME="FbTerm"
+DAEMON="/usr/bin/fbterm"
+PIDOF_NAME="fbterm"
+
+# Helper function: log messages
+log() {
+    echo "S99fbterm: $1"
+}
+
+# Function to start the service
+do_start() {
+    log "Starting..."
+
+    # --- Robustness check: wait for critical devices to be ready ---
+    local timeout=10
+    while [ ! -e /dev/tty1 ] && [ $timeout -gt 0 ]; do
+        sleep 1
+        timeout=$((timeout - 1))
+    done
+    if [ ! -e /dev/tty1 ]; then
+        log "Error: /dev/tty1 did not appear in time."
+        return 1
+    fi
+    
+    # Set environment variables and terminal attributes
+    export LANG=en_US.UTF-8
+    export LC_ALL=en_US.UTF-8
+    stty iutf8 -F /dev/console
+
+    # Release framebuffer from the kernel console
+    if [ -e /sys/class/vtconsole/vtcon1/bind ]; then
+        echo 0 > /sys/class/vtconsole/vtcon1/bind 2>/dev/null
+    fi
+
+    log "Launching FbTerm daemon..."
+    # Launch in a new session using setsid with explicit I/O redirection
+    setsid sh -c "exec $DAEMON </dev/tty1 >/dev/tty1 2>&1" &
+    
+    log "Started."
+}
+
+# Function to stop the service
+do_stop() {
+    log "Stopping..."
+    
+    # Check if the process exists, then kill it, redirecting errors
+    if pidof $PIDOF_NAME > /dev/null 2>&1; then
+        killall $PIDOF_NAME > /dev/null 2>&1
+        sleep 1 # Wait for the process to exit
+    fi
+
+    # Return the framebuffer to the kernel console
+    if [ -e /sys/class/vtconsole/vtcon1/bind ]; then
+        echo 1 > /sys/class/vtconsole/vtcon1/bind 2>/dev/null
+    fi
+    
+    log "Stopped."
+}
+
+case "$1" in
+  start)
+    do_start
+    ;;
+  stop)
+    do_stop
+    ;;
+  restart)
+    do_stop
+    sleep 1
+    do_start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit 0
+
+

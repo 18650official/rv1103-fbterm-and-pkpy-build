@@ -1,0 +1,71 @@
+#!/bin/sh
+#
+# S99analogkeypad: Start/Stop the analog keypad daemon
+#
+
+NAME=analog_keypad
+DAEMON=/usr/bin/$NAME
+PIDFILE=/var/run/$NAME.pid
+
+start() {
+    # 首先，用pidof检查进程是否已经真正在运行
+    if pidof $NAME >/dev/null; then
+        echo "$NAME is already running."
+        return
+    fi
+    
+    echo "Starting $NAME..."
+    # 直接运行程序，它会自己进入后台
+    $DAEMON
+    
+    # 等待一秒，确保子进程已经启动
+    sleep 1
+    
+    # 使用pidof找到新启动的后台进程的PID，并写入PID文件
+    if pidof $NAME > "$PIDFILE"; then
+        echo "$NAME started."
+    else
+        echo "Failed to start $NAME."
+    fi
+}
+
+stop() {
+    if [ ! -f "$PIDFILE" ]; then
+        echo "$NAME is not running (PID file not found)."
+        # 作为备用方案，尝试按名字kill一次
+        killall $NAME >/dev/null 2>&1
+        return
+    fi
+    
+    echo "Stopping $NAME..."
+    # 从文件中读取PID并停止进程
+    kill $(cat "$PIDFILE")
+    
+    # 删除PID文件
+    rm -f "$PIDFILE"
+    echo "$NAME stopped."
+}
+
+restart() {
+    stop
+    sleep 1
+    start
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        restart
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+
+exit 0
+

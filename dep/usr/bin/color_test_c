@@ -1,0 +1,90 @@
+#!/bin/sh
+
+# ===================================================================
+# 24-bit True Color Rainbow Test Script for Embedded Systems
+#
+# Function: Prints a rainbow gradient on terminals that support 24-bit true color.
+# Suitable for testing if the LCD screen and terminal display are working correctly on system boot.
+# Author: Gemini
+# ===================================================================
+
+# --- Configurable Parameters ---
+# You can adjust the height and width of the rainbow gradient.
+HEIGHT=1 # Height of the rainbow (number of lines to print)
+WIDTH=60  # Width of the rainbow (number of characters per line)
+
+# --- Core Function: print_rainbow ---
+print_rainbow() {
+    # Clear the screen and move the cursor to the top-left corner
+    printf "\033[2J\033[H"
+    printf "--- 24-Bit True Color Terminal Test ---\n\n"
+
+    # The rainbow spectrum is divided into 6 phases, this is the length of each phase
+    local phase_len=$((WIDTH / 6))
+
+    local y=0
+    while [ "$y" -lt "$HEIGHT" ]; do
+        local x=0
+        while [ "$x" -lt "$WIDTH" ]; do
+            # Calculate R, G, B values based on the current position
+            local r=0 g=0 b=0
+            local phase=$((x / phase_len))
+            local pos_in_phase=$((x % phase_len))
+            local val=$((pos_in_phase * 255 / phase_len))
+
+            case $phase in
+                0) # Red -> Yellow
+                    r=255
+                    g=$val
+                    b=0
+                    ;;
+                1) # Yellow -> Green
+                    r=$((255 - val))
+                    g=255
+                    b=0
+                    ;;
+                2) # Green -> Cyan
+                    r=0
+                    g=255
+                    b=$val
+                    ;;
+                3) # Cyan -> Blue
+                    r=0
+                    g=$((255 - val))
+                    b=255
+                    ;;
+                4) # Blue -> Magenta
+                    r=$val
+                    g=0
+                    b=255
+                    ;;
+                5) # Magenta -> Red
+                    r=255
+                    g=0
+                    b=$((255 - val))
+                    ;;
+                *) # Fallback for the remainder if width is not divisible by 6
+                    r=255
+                    g=0
+                    b=0
+                    ;;
+            esac
+            
+            # Set the background color using an ANSI escape code and print a space
+            printf "\033[48;2;%s;%s;%sm " "$r" "$g" "$b"
+            
+            x=$((x + 1))
+        done
+        
+        # Newline and reset color at the end of each line
+        printf "\033[0m\n"
+        y=$((y + 1))
+    done
+
+    printf "\nTest Complete.\n"
+}
+
+# --- Main Script Entrypoint ---
+print_rainbow
+
+
