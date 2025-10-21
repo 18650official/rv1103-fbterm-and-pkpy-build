@@ -55,7 +55,7 @@ DISTCLEAN += $(OBJ_BUILD)/config.cache  \
 
 # Standard installation variables.
 #
-prefix       := 
+prefix       := /usr
 exec_prefix  := ${prefix}
 libdir       := ${exec_prefix}/lib
 bindir       := ${exec_prefix}/bin

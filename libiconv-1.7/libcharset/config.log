@@ -3,12 +3,12 @@ running configure, to aid debugging if configure makes a mistake.
 
 configure:716: checking whether make sets ${MAKE}
 configure:751: checking for gcc
-configure:864: checking whether the C compiler (arm-rockchip830-linux-uclibcgnueabihf-gcc -O  -L/home/miku/rv_build/staging/lib) works
-configure:880: arm-rockchip830-linux-uclibcgnueabihf-gcc -O -o conftest  -I/home/miku/rv_build/staging/include -L/home/miku/rv_build/staging/lib conftest.c  1>&5
+configure:864: checking whether the C compiler (arm-rockchip830-linux-uclibcgnueabihf-gcc -O  -L/home/miku/rv_build/staging/usr/lib) works
+configure:880: arm-rockchip830-linux-uclibcgnueabihf-gcc -O -o conftest  -I/home/miku/rv_build/staging/usr/include -L/home/miku/rv_build/staging/usr/lib conftest.c  1>&5
 configure:877:1: warning: return type defaults to 'int' [-Wimplicit-int]
  main(){return(0);}
  ^~~~
-configure:906: checking whether the C compiler (arm-rockchip830-linux-uclibcgnueabihf-gcc -O  -L/home/miku/rv_build/staging/lib) is a cross-compiler
+configure:906: checking whether the C compiler (arm-rockchip830-linux-uclibcgnueabihf-gcc -O  -L/home/miku/rv_build/staging/usr/lib) is a cross-compiler
 configure:911: checking whether we are using GNU C
 configure:939: checking whether arm-rockchip830-linux-uclibcgnueabihf-gcc -O accepts -g
 configure:971: checking how to run the C preprocessor
@@ -35,12 +35,12 @@ configure:2201: checking for ranlib
 configure:2268: checking for strip
 configure:2504: checking for objdir
 configure:2531: checking for arm-rockchip830-linux-uclibcgnueabihf-gcc option to produce PIC
-configure:2683: checking if arm-rockchip830-linux-uclibcgnueabihf-gcc PIC flag                                          -fPIC works
+configure:2683: checking if arm-rockchip830-linux-uclibcgnueabihf-gcc PIC flag                                              -fPIC works
 configure:2749: checking if arm-rockchip830-linux-uclibcgnueabihf-gcc static flag -static works
 configure:2791: checking if arm-rockchip830-linux-uclibcgnueabihf-gcc supports -c -o file.o
 configure:2839: checking if arm-rockchip830-linux-uclibcgnueabihf-gcc supports -c -o file.lo
 configure:2904: checking if arm-rockchip830-linux-uclibcgnueabihf-gcc supports -fno-rtti -fno-exceptions
-configure:2917: arm-rockchip830-linux-uclibcgnueabihf-gcc -O -c -g -O2 -fno-rtti -fno-exceptions -c conftest.c -I/home/miku/rv_build/staging/include conftest.c 1>&5
+configure:2917: arm-rockchip830-linux-uclibcgnueabihf-gcc -O -c -g -O2 -fno-rtti -fno-exceptions -c conftest.c -I/home/miku/rv_build/staging/usr/include conftest.c 1>&5
 cc1: warning: command line option '-fno-rtti' is valid for C++/ObjC++ but not for C
 cc1: warning: command line option '-fno-rtti' is valid for C++/ObjC++ but not for C
 configure:2944: checking whether the linker (arm-rockchip830-linux-uclibcgnueabihf-ld) supports shared libraries

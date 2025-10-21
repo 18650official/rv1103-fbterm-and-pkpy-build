@@ -9,8 +9,8 @@ srcdir = .
 # Programs used by "make":
 CC = arm-rockchip830-linux-uclibcgnueabihf-gcc -O
 CFLAGS = 
-CPPFLAGS = -I/home/miku/rv_build/staging/include
-LDFLAGS = -L/home/miku/rv_build/staging/lib
+CPPFLAGS = -I/home/miku/rv_build/staging/usr/include
+LDFLAGS = -L/home/miku/rv_build/staging/usr/lib
 INCLUDES = -I. -I$(srcdir) -I../include -I$(srcdir)/../include -I../lib
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIBTOOL_COMPILE = $(LIBTOOL) --mode=compile

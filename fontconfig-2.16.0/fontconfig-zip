@@ -7,7 +7,7 @@
 ZIP=/tmp/fontconfig-2.16.0.zip
 DEVZIP=/tmp/fontconfig-dev-2.16.0.zip
 
-cd /home/miku/rv_build/staging
+cd /usr
 rm -f $ZIP
 zip $ZIP -@ <<EOF
 bin/libfontconfig-1.dll

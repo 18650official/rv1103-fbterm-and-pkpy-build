@@ -79,22 +79,22 @@ fclang.lo: fclang.c fcint.h ../config.h ../config-fixups.h fcstdint.h \
  fcatomic.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/lib/gcc/arm-rockchip830-linux-uclibcgnueabihf/8.3.0/include/stdatomic.h \
  fcalias.h fcobjs.h fcftint.h ../fontconfig/fcfreetype.h \
- /home/miku/rv_build/staging/include/freetype2/ft2build.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/ftheader.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/freetype.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/ftconfig.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/ftoption.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/ftstdlib.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/ft2build.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftheader.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/freetype.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftconfig.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftoption.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftstdlib.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/setjmp.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/integer-types.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/public-macros.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/mac-support.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/fttypes.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/ftsystem.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/ftimage.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/fterrors.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/ftmoderr.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/fterrdef.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/integer-types.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/public-macros.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/mac-support.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/fttypes.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/ftsystem.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/ftimage.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/fterrors.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/ftmoderr.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/fterrdef.h \
  fcftalias.h ../fc-lang/fclang.h fcaliastail.h fcftaliastail.h
 
 fcint.h:
@@ -275,37 +275,37 @@ fcftint.h:
 
 ../fontconfig/fcfreetype.h:
 
-/home/miku/rv_build/staging/include/freetype2/ft2build.h:
+/home/miku/rv_build/staging/usr/include/freetype2/ft2build.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/ftheader.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftheader.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/freetype.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/freetype.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/ftconfig.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftconfig.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/ftoption.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftoption.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/ftstdlib.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftstdlib.h:
 
 /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/setjmp.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/integer-types.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/integer-types.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/public-macros.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/public-macros.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/mac-support.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/mac-support.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/fttypes.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/fttypes.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/ftsystem.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/ftsystem.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/ftimage.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/ftimage.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/fterrors.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/fterrors.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/ftmoderr.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/ftmoderr.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/fterrdef.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/fterrdef.h:
 
 fcftalias.h:
 

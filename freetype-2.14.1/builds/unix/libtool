@@ -41,7 +41,7 @@ macro_version=2.4.6
 macro_revision=2.4.6
 
 # Assembler program.
-AS="as"
+AS="arm-rockchip830-linux-uclibcgnueabihf-as"
 
 # DLL creation program.
 DLLTOOL="false"
@@ -74,14 +74,14 @@ ECHO="printf %s\\n"
 PATH_SEPARATOR=":"
 
 # The host system.
-host_alias=
-host=x86_64-pc-linux-gnu
+host_alias=arm-linux
+host=arm-unknown-linux-gnu
 host_os=linux-gnu
 
 # The build system.
 build_alias=
-build=x86_64-pc-linux-gnu
-build_os=linux-gnu
+build=x86_64-pc-linux-uclibc
+build_os=linux-uclibc
 
 # A sed program that does not truncate output.
 SED="/usr/bin/sed"
@@ -99,7 +99,7 @@ EGREP="/usr/bin/grep -E"
 FGREP="/usr/bin/grep -F"
 
 # A BSD- or MS-compatible name lister.
-NM="/usr/bin/nm -B"
+NM="arm-rockchip830-linux-uclibcgnueabihf-nm"
 
 # Whether we need soft or hard links.
 LN_S="ln -s"
@@ -144,7 +144,7 @@ want_nocaseglob="no"
 sharedlib_from_linklib_cmd="printf %s\\n"
 
 # The archiver.
-AR="ar"
+AR="arm-rockchip830-linux-uclibcgnueabihf-ar"
 
 # Flags to create an archive.
 AR_FLAGS="cr"
@@ -153,10 +153,10 @@ AR_FLAGS="cr"
 archiver_list_spec="@"
 
 # A symbol stripping program.
-STRIP="strip"
+STRIP="arm-rockchip830-linux-uclibcgnueabihf-strip"
 
 # Commands used to install an old-style archive.
-RANLIB="ranlib"
+RANLIB="arm-rockchip830-linux-uclibcgnueabihf-ranlib"
 old_postinstall_cmds="chmod 644 \$oldlib~\$RANLIB \$tool_oldlib"
 old_postuninstall_cmds=""
 
@@ -164,7 +164,7 @@ old_postuninstall_cmds=""
 lock_old_archive_extraction=no
 
 # A C compiler.
-LTCC="gcc"
+LTCC="arm-rockchip830-linux-uclibcgnueabihf-gcc"
 
 # LTCC compiler flags.
 LTCFLAGS="-g -O2 -fvisibility=hidden   -pthread"
@@ -252,7 +252,7 @@ runpath_var=LD_RUN_PATH
 shlibpath_var=LD_LIBRARY_PATH
 
 # Is shlibpath searched before the hard-coded library search path?
-shlibpath_overrides_runpath=yes
+shlibpath_overrides_runpath=no
 
 # Format of library name prefix.
 libname_spec="lib\$name"
@@ -284,7 +284,7 @@ finish_eval=""
 hardcode_into_libs=yes
 
 # Compile-time system search path for libraries.
-sys_lib_search_path_spec="/usr/lib/gcc/x86_64-linux-gnu/9 /usr/lib/x86_64-linux-gnu /usr/lib /lib/x86_64-linux-gnu /lib "
+sys_lib_search_path_spec="/home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/lib/gcc/arm-rockchip830-linux-uclibcgnueabihf/8.3.0 /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/lib/gcc /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/lib /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/lib /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/lib "
 
 # Detected run-time system search path for libraries.
 sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/lib/x86_64-linux-gnu/libfakeroot /usr/local/lib /usr/local/lib/x86_64-linux-gnu /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /lib32 /usr/lib32 /libx32 /usr/libx32 "
@@ -302,12 +302,12 @@ dlopen_self=unknown
 dlopen_self_static=unknown
 
 # Commands to strip libraries.
-old_striplib="strip --strip-debug"
-striplib="strip --strip-unneeded"
+old_striplib="arm-rockchip830-linux-uclibcgnueabihf-strip --strip-debug"
+striplib="arm-rockchip830-linux-uclibcgnueabihf-strip --strip-unneeded"
 
 
 # The linker used to build libraries.
-LD="/usr/bin/ld -m elf_x86_64"
+LD="arm-rockchip830-linux-uclibcgnueabihf-ld"
 
 # How to create reloadable object files.
 reload_flag=" -r"
@@ -317,7 +317,7 @@ reload_cmds="\$LD\$reload_flag -o \$output\$reload_objs"
 old_archive_cmds="\$AR \$AR_FLAGS \$oldlib\$oldobjs~\$RANLIB \$tool_oldlib"
 
 # A language specific compiler.
-CC="gcc"
+CC="arm-rockchip830-linux-uclibcgnueabihf-gcc"
 
 # Is the compiler the GNU compiler?
 with_gcc=yes
@@ -360,10 +360,7 @@ old_archive_from_expsyms_cmds=""
 
 # Commands used to build a shared archive.
 archive_cmds="\$CC -shared \$pic_flag \$libobjs \$deplibs \$compiler_flags \$wl-soname \$wl\$soname -o \$lib"
-archive_expsym_cmds="echo \\\"{ global:\\\" > \$output_objdir/\$libname.ver~
-            cat \$export_symbols | sed -e \\\"s/\\\\(.*\\\\)/\\\\1;/\\\" >> \$output_objdir/\$libname.ver~
-            echo \\\"local: *; };\\\" >> \$output_objdir/\$libname.ver~
-            \$CC -shared \$pic_flag \$libobjs \$deplibs \$compiler_flags \$wl-soname \$wl\$soname \$wl-version-script \$wl\$output_objdir/\$libname.ver -o \$lib"
+archive_expsym_cmds=""
 
 # Commands used to build a loadable module if different from building
 # a shared archive.

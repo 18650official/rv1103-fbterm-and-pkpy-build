@@ -12,7 +12,7 @@
 # fully.
 
 
-CC           := gcc
+CC           := arm-rockchip830-linux-uclibcgnueabihf-gcc
 COMPILER_SEP := $(SEP)
 FT_LIBTOOL_DIR ?= $(PLATFORM_DIR)
 
@@ -78,7 +78,7 @@ T := -o$(space)
 #
 #   We use our own FreeType configuration files overriding defaults.
 #
-CPPFLAGS := 
+CPPFLAGS := -I/home/miku/rv_build/staging/usr/include
 CFLAGS   := -c -Wall -g -O2 -fvisibility=hidden   -pthread \
             $DFT_CONFIG_CONFIG_H="<ftconfig.h>" \
             $DFT_CONFIG_MODULES_H="<ftmodule.h>" \
@@ -106,7 +106,7 @@ endif
 
 # Linker flags.
 #
-LDFLAGS :=  -lz -ldl -pthread -lpthread
+LDFLAGS := -L/home/miku/rv_build/staging/usr/lib -lz  -pthread -lpthread
 
 # export symbols
 #
@@ -116,7 +116,7 @@ E_BUILD       :=            # extension for executable on
 EXPORTS_LIST  := $(OBJ_DIR)/ftexport.sym
 CCexe         := $(CCraw_build)           # used to compile `apinames` only,
                                           # see `exports.mk`
-CCexe_CFLAGS  := -g -O2           # ditto
+CCexe_CFLAGS  :=            # ditto
 CCexe_LDFLAGS :=           # ditto
 
 

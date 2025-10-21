@@ -35,12 +35,12 @@ fc-scan.o: fc-scan.c ../config.h ../config-fixups.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/bits/xopen_lim.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/bits/stdio_lim.h \
  ../fontconfig/fcfreetype.h \
- /home/miku/rv_build/staging/include/freetype2/ft2build.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/ftheader.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/freetype.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/ftconfig.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/ftoption.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/ftstdlib.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/ft2build.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftheader.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/freetype.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftconfig.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftoption.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftstdlib.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/string.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/stdio.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/bits/uClibc_stdio.h \
@@ -52,15 +52,15 @@ fc-scan.o: fc-scan.c ../config.h ../config-fixups.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/alloca.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/setjmp.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/bits/setjmp.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/integer-types.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/public-macros.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/config/mac-support.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/fttypes.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/ftsystem.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/ftimage.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/fterrors.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/ftmoderr.h \
- /home/miku/rv_build/staging/include/freetype2/freetype/fterrdef.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/integer-types.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/public-macros.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/config/mac-support.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/fttypes.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/ftsystem.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/ftimage.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/fterrors.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/ftmoderr.h \
+ /home/miku/rv_build/staging/usr/include/freetype2/freetype/fterrdef.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/locale.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/bits/uClibc_locale.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/unistd.h \
@@ -147,17 +147,17 @@ fc-scan.o: fc-scan.c ../config.h ../config-fixups.h \
 
 ../fontconfig/fcfreetype.h:
 
-/home/miku/rv_build/staging/include/freetype2/ft2build.h:
+/home/miku/rv_build/staging/usr/include/freetype2/ft2build.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/ftheader.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftheader.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/freetype.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/freetype.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/ftconfig.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftconfig.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/ftoption.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftoption.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/ftstdlib.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/ftstdlib.h:
 
 /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/string.h:
 
@@ -181,23 +181,23 @@ fc-scan.o: fc-scan.c ../config.h ../config-fixups.h \
 
 /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/bits/setjmp.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/integer-types.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/integer-types.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/public-macros.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/public-macros.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/config/mac-support.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/config/mac-support.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/fttypes.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/fttypes.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/ftsystem.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/ftsystem.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/ftimage.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/ftimage.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/fterrors.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/fterrors.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/ftmoderr.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/ftmoderr.h:
 
-/home/miku/rv_build/staging/include/freetype2/freetype/fterrdef.h:
+/home/miku/rv_build/staging/usr/include/freetype2/freetype/fterrdef.h:
 
 /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/locale.h:
 

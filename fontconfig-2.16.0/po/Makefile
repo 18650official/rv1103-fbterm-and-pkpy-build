@@ -21,7 +21,7 @@ srcdir = .
 top_srcdir = ..
 
 
-prefix = /home/miku/rv_build/staging
+prefix = /usr
 exec_prefix = ${prefix}
 datarootdir = ${prefix}/share
 datadir = ${datarootdir}

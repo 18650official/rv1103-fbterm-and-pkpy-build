@@ -7,7 +7,7 @@
 srcdir = .
 
 # Directories used by "make install":
-prefix = /home/miku/rv_build/staging
+prefix = /usr
 local_prefix = /usr/local
 exec_prefix = ${prefix}
 mandir = ${prefix}/man

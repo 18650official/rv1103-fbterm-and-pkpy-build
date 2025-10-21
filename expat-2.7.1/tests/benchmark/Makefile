@@ -230,7 +230,7 @@ CC = arm-rockchip830-linux-uclibcgnueabihf-gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
 CMAKE_SHARED_LIBRARY_PREFIX = lib
-CPPFLAGS = -I/home/miku/rv_build/staging/include
+CPPFLAGS = -I/home/miku/rv_build/staging/usr/include
 CSCOPE = cscope
 CTAGS = ctags
 CXX = arm-rockchip830-linux-uclibcgnueabihf-g++ -std=c++11
@@ -268,7 +268,7 @@ INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LD = arm-rockchip830-linux-uclibcgnueabihf-ld
-LDFLAGS = -L/home/miku/rv_build/staging/lib
+LDFLAGS = -L/home/miku/rv_build/staging/usr/lib
 LIBAGE = 10
 LIBCURRENT = 11
 LIBDIR_BASENAME = lib
@@ -351,7 +351,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /home/miku/rv_build/staging
+prefix = /usr
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run

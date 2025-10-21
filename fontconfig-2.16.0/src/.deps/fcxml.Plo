@@ -84,8 +84,8 @@ fcxml.lo: fcxml.c fcint.h ../config.h ../config-fixups.h fcstdint.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/bits/uio.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/dirent.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/bits/dirent.h \
- /home/miku/rv_build/staging/include/expat.h \
- /home/miku/rv_build/staging/include/expat_external.h \
+ /home/miku/rv_build/staging/usr/include/expat.h \
+ /home/miku/rv_build/staging/usr/include/expat_external.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/locale.h \
  /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/bits/uClibc_locale.h \
  fcaliastail.h
@@ -274,9 +274,9 @@ fcobjs.h:
 
 /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/bits/dirent.h:
 
-/home/miku/rv_build/staging/include/expat.h:
+/home/miku/rv_build/staging/usr/include/expat.h:
 
-/home/miku/rv_build/staging/include/expat_external.h:
+/home/miku/rv_build/staging/usr/include/expat_external.h:
 
 /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/sysroot/usr/include/locale.h:
 

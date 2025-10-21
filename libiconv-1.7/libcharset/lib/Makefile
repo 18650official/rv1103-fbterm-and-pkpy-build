@@ -7,7 +7,7 @@
 srcdir = .
 
 # Directories used by "make install":
-prefix = /home/miku/rv_build/staging
+prefix = /usr
 local_prefix = /usr/local
 exec_prefix = ${prefix}
 libdir = ${exec_prefix}/lib
@@ -15,8 +15,8 @@ libdir = ${exec_prefix}/lib
 # Programs used by "make":
 CC = arm-rockchip830-linux-uclibcgnueabihf-gcc -O
 CFLAGS = -g -O2
-CPPFLAGS = -I/home/miku/rv_build/staging/include
-LDFLAGS = -L/home/miku/rv_build/staging/lib
+CPPFLAGS = -I/home/miku/rv_build/staging/usr/include
+LDFLAGS = -L/home/miku/rv_build/staging/usr/lib
 INCLUDES = -I. -I$(srcdir) -I.. -I$(srcdir)/..
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIBTOOL_COMPILE = $(LIBTOOL) --mode=compile
