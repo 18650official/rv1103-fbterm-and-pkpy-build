@@ -4,3 +4,6 @@
 [submodule "pocketpy"]
 	path = pocketpy
 	url = https://github.com/pocketpy/pocketpy.git
+[submodule "lvgl_menu"]
+	path = lvgl_menu
+	url = https://github.com/18650official/lvgl_menu_for_pkpy_luckfoxpico
