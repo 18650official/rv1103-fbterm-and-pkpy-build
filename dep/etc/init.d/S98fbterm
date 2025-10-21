@@ -1,50 +1,87 @@
 #!/bin/sh
 
 # ==========================================================
-# ==      A Robust Service Script for FbTerm              ==
+# == init.d script for FbTerm
+# == Manages starting and stopping the framebuffer terminal
 # ==========================================================
 
-# This script is designed to be called by the init system
-# during the boot sequence (runlevels).
+DAEMON=/usr/bin/fbterm
+PIDFILE=/var/run/fbterm.pid
+NAME="fbterm"
 
-case "$1" in
-  start)
-    echo "Starting Framebuffer Terminal (FbTerm)..."
-    
-    export LANG=en_US.UTF-8
-    export LC_ALL=en_US.UTF-8
-    stty iutf8 -F /dev/console
-    # stty iutf8 -F /dev/pts/1
-
-    # A short delay to ensure the system is fully ready
-    sleep 1
-    
-    # Release the framebuffer from the default kernel console
-    if [ -e /sys/class/vtconsole/vtcon1/bind ]; then
-        echo 0 > /sys/class/vtconsole/vtcon1/bind
-    fi
-    
-    # Launch fbterm in a new session, detached from init,
-    # with its I/O explicitly redirected to the physical console.
-    setsid sh -c 'exec fbterm </dev/tty1 >/dev/tty1 2>&1' &
-    # sleep 0.2
-    # /bin/sh -c "/usr/bin/yaft" > /dev/console &
-    ;;
-  stop)
-    echo "Stopping Framebuffer Terminal (FbTerm)..."
-    killall fbterm
-    if [ -e /sys/class/vtconsole/vtcon1/bind ]; then
-        echo 1 > /sys/class/vtconsole/vtcon1/bind
-    fi
-    ;;
-  restart)
-    $0 stop
-    sleep 1
-    $0 start
-    ;;
-  *)
-    echo "Usage: $0 {start|stop|restart}"
+# Check if the daemon executable exists
+if [ ! -x "$DAEMON" ]; then
+    echo "Error: $DAEMON not found or not executable"
     exit 1
+fi
+
+# Function to start the service WITH input (for games/interactive apps)
+do_start_with_input() {
+    if [ -f $PIDFILE ]; then
+        echo "$NAME is already running."
+        return
+    fi
+    
+    echo "Starting $NAME with standard input..."
+
+    # Unbind the kernel's virtual console from tty1 to prevent conflicts
+    if [ -e /sys/class/vtconsole/vtcon1/bind ]; then
+        echo 0 > /sys/class/vtconsole/vtcon1/bind 2>/dev/null
+    fi
+
+    # Switch to tty1 to ensure it's the foreground TTY
+    chvt 1
+
+    # Launch fbterm in a new session, making it the controlling process of tty1
+    # This command runs it in the background (&) and detaches it
+    setsid sh -c "exec $DAEMON </dev/tty1 >/dev/tty1 2>&1" &
+    
+    # Save the PID of the backgrounded setsid/sh/fbterm process
+    echo $! > $PIDFILE
+
+    echo "$NAME started."
+}
+
+# Function to stop the service
+do_stop() {
+    if [ -f $PIDFILE ]; then
+        echo "Stopping $NAME..."
+        # Kill the process using the saved PID
+        kill $(cat $PIDFILE)
+        # Remove the PID file
+        rm $PIDFILE
+        
+        # --- CRITICAL: Restore the kernel console ---
+        # Re-bind the kernel's virtual console to tty1 so the system
+        # can display kernel messages again if needed.
+        if [ -e /sys/class/vtconsole/vtcon1/bind ]; then
+            echo 1 > /sys/class/vtconsole/vtcon1/bind 2>/dev/null
+        fi
+
+        echo "$NAME stopped."
+    else
+        echo "$NAME is not running."
+    fi
+}
+
+# --- Main script logic ---
+case "$1" in
+    stop)
+        do_stop
+        ;;
+    restart)
+        do_stop
+        sleep 1
+        do_start_with_input
+        ;;
+    start_with_input)
+        # A specific command for compatibility with your other scripts
+        do_start_with_input
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|start_with_input}"
+        exit 1
+        ;;
 esac
 
 exit 0

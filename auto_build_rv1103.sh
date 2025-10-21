@@ -285,6 +285,36 @@ echo "======== PocketPy compilation finished. ========"
     echo "======== fbterm compilation finished. ========"
 )
 
+# --- Compile lvgl_menu ---
+echo ""
+echo "======== 5.8 Compiling lvgl_menu ========"
+cd "${BUILD_DIR}/lvgl_menu"
+# Clean previous builds if any
+make clean &> /dev/null || true
+
+# --- CRITICAL FIX: Initialize nested submodules ---
+# This command will pull the 'lvgl' submodule which is inside 'lvgl_menu'.
+echo "--> Initializing nested submodules for lvgl_menu (e.g., lvgl)..."
+git submodule update --init --recursive
+echo "--> Submodules initialized."
+
+# Configure the build using the script's environment variables
+./configure --prefix=/usr --cross-compile="${TOOLCHAIN_PREFIX}"
+
+# Build the project
+make -j$(nproc)
+
+# --- CRITICAL FIX: Install to the main staging directory ---
+# This places the final pico-menu binary into ${INSTALL_DIR}/usr/bin/
+echo "--> Installing pico-menu to staging directory..."
+make install DESTDIR="${INSTALL_DIR}"
+
+echo "lvgl_menu executable is installed at: ${INSTALL_DIR}/usr/bin/pico-menu"
+cd "${BUILD_DIR}"
+echo "======== lvgl_menu compilation finished. ========"
+
+# -------------- Compile finish -------------------- #
+
 echo ""
 echo "================================================================="
 echo "All projects compiled successfully!"
@@ -318,6 +348,10 @@ cp -f "${BUILD_DIR}/pocketpy/build/main" "${EXPORT_DIR}/usr/bin/pocketpy"
 # --- UPDATED PATH: Tools are now in staging/usr/bin ---
 echo "  -> Copying fontconfig tools..."
 cp -f "${BUILD_DIR}/staging/usr/bin/"* "${EXPORT_DIR}/usr/bin/"
+
+# Export lvgl_menu
+echo "  -> Copying pico-menu..."
+cp -f "${INSTALL_DIR}/usr/bin/pico-menu" "${EXPORT_DIR}/usr/bin/"
 
 echo "====== Executables exported. ======"
 echo ""
