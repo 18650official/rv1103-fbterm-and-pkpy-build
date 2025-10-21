@@ -178,8 +178,13 @@ echo ""
 echo "======== 5.2 Compiling expat-2.7.1 ========"
 cd "${BUILD_DIR}/expat-2.7.1"
 make clean &> /dev/null || true
-# --- UPDATED: Use standard prefix and DESTDIR ---
-./configure --prefix=/usr --host="${TARGET_HOST}" --enable-static --disable-shared --without-docbook
+# --- UPDATED: Add --disable-docs to skip building documentation ---
+./configure --prefix=/usr \
+            --host="${TARGET_HOST}" \
+            --enable-static \
+            --disable-shared \
+            --without-docbook \
+            --disable-docs
 make -j$(nproc)
 make install DESTDIR="${INSTALL_DIR}"
 cd "${BUILD_DIR}"
