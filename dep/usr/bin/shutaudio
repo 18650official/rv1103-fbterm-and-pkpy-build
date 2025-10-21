@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/usr/bin/midi_player /usr/share/audio/xpoff.txt

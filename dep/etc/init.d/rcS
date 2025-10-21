@@ -25,3 +25,6 @@ for i in /etc/init.d/S??* ;do
     esac
 done
 
+# Boot audio
+/bin/sh -c /usr/bin/bootaudio
+

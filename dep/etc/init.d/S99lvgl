@@ -1,0 +1,53 @@
+#!/bin/sh
+#
+# S99lvgl: Start/Stop the main LVGL GUI application.
+# This will be the primary UI on boot.
+#
+
+NAME="LVGL GUI"
+DAEMON="/usr/bin/pico-menu"
+PIDOF_NAME="pico-menu"
+
+log() {
+    echo "S99lvgl: $1"
+}
+
+do_start() {
+    # Ensure the analog keypad daemon is running, as the GUI depends on it.
+    if ! pidof analog_keypad > /dev/null; then
+        log "Starting analog_keypad daemon..."
+        /etc/init.d/S99analogkeypad start
+        sleep 1 # Give it a moment to initialize
+    fi
+
+    log "Starting $NAME..."
+    # Launch in a new session to detach from the init process.
+    setsid $DAEMON &
+}
+
+do_stop() {
+    log "Stopping $NAME..."
+    # Check if the process exists, then kill it.
+    if pidof $PIDOF_NAME > /dev/null 2>&1; then
+        killall $PIDOF_NAME > /dev/null 2>&1
+    fi
+}
+
+case "$1" in
+  start)
+    do_start
+    ;;
+  stop)
+    do_stop
+    ;;
+  restart)
+    do_stop
+    sleep 1
+    do_start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit 0

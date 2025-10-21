@@ -1,0 +1,7 @@
+# Analog Keypad Calibration Data (with calculated thresholds)
+A 0.3579 0.4602
+W 0.4602 0.6160
+S 0.6160 0.8326
+D 0.8326 1.1712
+SPACE 1.1712 1.5990
+IDLE 1.5990 1.8482
