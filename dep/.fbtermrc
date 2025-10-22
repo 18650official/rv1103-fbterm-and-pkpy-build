@@ -1,18 +1,16 @@
-# ~/.fbtermrc
-#
-# Configuration file for FbTerm.
+# Configuration for FbTerm
 
-# Set the font family and size.
-# 'monospace' will be resolved by fontconfig according to your rules
-# in /etc/fonts/conf.d/10-local.conf, using Cascadia Mono for English
-# and Microsoft YaHei for Chinese characters.
-font-family=monospace
+# Lines starting with '#' are ignored.
+# Note that end-of-line comments are NOT supported, comments must be on a line of their own.
+
+
+# font family names/pixelsize used by fbterm, multiple font family names must be seperated by ','
+# and using a fixed width font as the first is strongly recommended
+font-names=monospace
 font-size=19
 
-# Set the text encoding to UTF-8 to correctly display multi-byte characters
-# like Chinese. This is crucial.
-text-encodings=UTF-8
-
+# force font width (and/or height), usually for non-fixed width fonts
+# legal value format: n (fw_new = n), +n (fw_new = fw_old + n), -n (fw_new = fw_old - n)
 #font-width=
 #font-height=
 
@@ -23,6 +21,10 @@ color-background=0
 
 # max scroll-back history lines of every window, value must be [0 - 65535], 0 means disable it
 history-lines=1000
+
+# up to 5 additional text encodings, multiple encodings must be seperated by ','
+# run 'iconv --list' to get available encodings.
+text-encodings=
 
 # cursor shape: 0 = underline, 1 = block
 # cursor flash interval in milliseconds, 0 means disable flashing
@@ -40,5 +42,4 @@ screen-rotate=0
 input-method=
 
 # treat ambiguous width characters as wide
-#ambiguous-wide=yes
-
+ambiguous-wide=yes
