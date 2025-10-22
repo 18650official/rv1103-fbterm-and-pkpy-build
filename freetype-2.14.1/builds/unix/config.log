@@ -30,6 +30,9 @@ uname -v = #236-Ubuntu SMP Fri Apr 11 19:53:21 UTC 2025
 PATH: /home/miku/rv_build/luckfox_toolchain/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/bin/
 PATH: /home/miku/luckfox-pico/sysdrv/source/kernel/drivers/block/zram/bin/
 PATH: /home/miku/luckfox-pico/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/bin/
+PATH: /home/miku/.vscode-server/cli/servers/Stable-d78a74bcdfad14d5d3b1b782f87255d802b57511/server/bin/remote-cli/
+PATH: /home/miku/luckfox-pico/sysdrv/source/kernel/drivers/block/zram/bin/
+PATH: /home/miku/luckfox-pico/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/bin/
 PATH: /home/miku/luckfox-pico/sysdrv/source/kernel/drivers/block/zram/bin/
 PATH: /home/miku/luckfox-pico/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/bin/
 PATH: /usr/local/sbin/

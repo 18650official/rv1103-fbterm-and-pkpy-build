@@ -5025,3 +5025,158 @@ uname = Linux
 --------------------
 
 
+--------------------
+./configure --prefix=/usr --static
+Wed 22 Oct 2025 09:52:27 AM UTC
+=== ztest406807.c ===
+extern int getchar();
+int hello() {return getchar();}
+===
+arm-rockchip830-linux-uclibcgnueabihf-gcc -c ztest406807.c
+... using gcc
+
+Checking for obsessive-compulsive compiler options...
+=== ztest406807.c ===
+int foo() { return 0; }
+===
+arm-rockchip830-linux-uclibcgnueabihf-gcc -c -O3 ztest406807.c
+
+Building static library libz.a version 1.3.1 with arm-rockchip830-linux-uclibcgnueabihf-gcc.
+
+=== ztest406807.c ===
+#include <stdio.h>
+#include <stdlib.h>
+size_t dummy = 0;
+===
+arm-rockchip830-linux-uclibcgnueabihf-gcc -c -O3 ztest406807.c
+Checking for size_t... Yes.
+
+=== ztest406807.c ===
+#include <sys/types.h>
+off64_t dummy = 0;
+===
+arm-rockchip830-linux-uclibcgnueabihf-gcc -c -O3 -D_LARGEFILE64_SOURCE=1 ztest406807.c
+Checking for off64_t... Yes.
+Checking for fseeko... Yes.
+
+=== ztest406807.c ===
+#include <string.h>
+#include <errno.h>
+int main() { return strlen(strerror(errno)); }
+===
+arm-rockchip830-linux-uclibcgnueabihf-gcc -O3 -D_LARGEFILE64_SOURCE=1 -o ztest406807 ztest406807.c
+Checking for strerror... Yes.
+
+=== ztest406807.c ===
+#include <unistd.h>
+int main() { return 0; }
+===
+arm-rockchip830-linux-uclibcgnueabihf-gcc -c -O3 -D_LARGEFILE64_SOURCE=1 ztest406807.c
+Checking for unistd.h... Yes.
+
+=== ztest406807.c ===
+#include <stdarg.h>
+int main() { return 0; }
+===
+arm-rockchip830-linux-uclibcgnueabihf-gcc -c -O3 -D_LARGEFILE64_SOURCE=1 ztest406807.c
+Checking for stdarg.h... Yes.
+
+=== ztest406807.c ===
+#include <stdio.h>
+#include <stdarg.h>
+#include "zconf.h"
+int main()
+{
+#ifndef STDC
+  choke me
+#endif
+  return 0;
+}
+===
+arm-rockchip830-linux-uclibcgnueabihf-gcc -c -O3 -D_LARGEFILE64_SOURCE=1 ztest406807.c
+Checking whether to use vs[n]printf() or s[n]printf()... using vs[n]printf().
+
+=== ztest406807.c ===
+#include <stdio.h>
+#include <stdarg.h>
+int mytest(const char *fmt, ...)
+{
+  char buf[20];
+  va_list ap;
+  va_start(ap, fmt);
+  vsnprintf(buf, sizeof(buf), fmt, ap);
+  va_end(ap);
+  return 0;
+}
+int main()
+{
+  return (mytest("Hello%d\n", 1));
+}
+===
+arm-rockchip830-linux-uclibcgnueabihf-gcc -O3 -D_LARGEFILE64_SOURCE=1 -o ztest406807 ztest406807.c
+Checking for vsnprintf() in stdio.h... Yes.
+
+=== ztest406807.c ===
+#include <stdio.h>
+#include <stdarg.h>
+int mytest(const char *fmt, ...)
+{
+  int n;
+  char buf[20];
+  va_list ap;
+  va_start(ap, fmt);
+  n = vsnprintf(buf, sizeof(buf), fmt, ap);
+  va_end(ap);
+  return n;
+}
+int main()
+{
+  return (mytest("Hello%d\n", 1));
+}
+===
+arm-rockchip830-linux-uclibcgnueabihf-gcc -c -O3 -D_LARGEFILE64_SOURCE=1 ztest406807.c
+Checking for return value of vsnprintf()... Yes.
+
+=== ztest406807.c ===
+#define ZLIB_INTERNAL __attribute__((visibility ("hidden")))
+int ZLIB_INTERNAL foo;
+int main()
+{
+  return 0;
+}
+===
+arm-rockchip830-linux-uclibcgnueabihf-gcc -c -O3 -D_LARGEFILE64_SOURCE=1 ztest406807.c
+Checking for attribute(visibility) support... Yes.
+
+ALL = static all64
+AR = arm-rockchip830-linux-uclibcgnueabihf-ar
+ARFLAGS = rc
+CC = arm-rockchip830-linux-uclibcgnueabihf-gcc
+CFLAGS = -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN
+CPP =
+EXE =
+LDCONFIG = ldconfig
+LDFLAGS = -L/home/miku/rv_build/staging/usr/lib
+LDSHARED = arm-rockchip830-linux-uclibcgnueabihf-gcc
+LDSHAREDLIBC = -lc
+OBJC = $(OBJZ) $(OBJG)
+PIC_OBJC = $(PIC_OBJZ) $(PIC_OBJG)
+RANLIB = arm-rockchip830-linux-uclibcgnueabihf-ranlib
+SFLAGS = -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN
+SHAREDLIB =
+SHAREDLIBM =
+SHAREDLIBV =
+STATICLIB = libz.a
+TEST = all teststatic test64
+VER = 1.3.1
+SRCDIR =
+exec_prefix = ${prefix}
+includedir = ${prefix}/include
+libdir = ${exec_prefix}/lib
+mandir = ${prefix}/share/man
+prefix = /usr
+sharedlibdir = ${libdir}
+uname = Linux
+--------------------
+
+
