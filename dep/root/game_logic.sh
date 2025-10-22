@@ -12,10 +12,7 @@ echo "Starting Main Boot Tasks..."
 sleep 0.3
 
 # 1. Auto update
-# The output is redirected to /dev/console to be visible on the LCD screen.
-/usr/local/bin/copy_file.sh
-# Show the update log
-sleep 2
+# Removed, the new version use ota to update
 
 # 2. Start Color test
 /usr/bin/color_test_c

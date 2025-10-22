@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设备升级</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; display: grid; place-items: center; min-height: 90vh; background: #f0f2f5; color: #333; }
+        .container { background: #fff; border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,0.07); padding: 2.5rem; text-align: center; width: 90%; max-width: 450px; }
+        h2 { margin-top: 0; }
+        p { color: #555; line-height: 1.6; }
+        input[type="file"] { display: block; width: calc(100% - 24px); margin: 1.5rem auto; border: 1px dashed #ccc; padding: 12px; border-radius: 8px; background: #f9f9f9; }
+        button { background: #007bff; color: white; border: none; padding: 14px 24px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 500; transition: background 0.2s; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #aaa; cursor: not-allowed; }
+        #status { margin-top: 1.5rem; font-weight: bold; font-size: 0.95rem; }
+        .status-wait { color: #555; }
+        .status-success { color: #28a745; }
+        .status-error { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>固件升级</h2>
+        <p>请选择您的 <code>.tar</code> 升级包，然后点击“开始升级”。升级过程中请勿断开设备电源。</p>
+        
+        <!-- 表单将文件 POST 到 cgi-bin 目录下的脚本 -->
+        <form id="uploadForm" action="/cgi-bin/upload.sh" method="POST" enctype="multipart/form-data">
+            <input type="file" name="firmware" id="firmware" accept=".tar,.tar.gz" required>
+            <button type="submit" id="submitButton">开始升级</button>
+        </form>
+        
+        <div id="status" class="status-wait">请选择文件...</div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // 阻止表单默认提交
+            
+            const form = e.target;
+            const fileInput = document.getElementById('firmware');
+            const statusDiv = document.getElementById('status');
+            const button = document.getElementById('submitButton');
+
+            if (fileInput.files.length === 0) {
+                statusDiv.innerText = '错误：请先选择一个文件！';
+                statusDiv.className = 'status-error';
+                return;
+            }
+
+            button.disabled = true;
+            button.innerText = '正在上传...';
+            statusDiv.innerText = '正在上传文件，请勿断开连接...';
+            statusDiv.className = 'status-wait';
+
+            const formData = new FormData(form);
+            
+            // 使用 Fetch API 异步上传
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`服务器错误: ${response.statusText}`);
+                }
+                return response.text(); // 获取 CGI 脚本的纯文本输出
+            })
+            .then(text => {
+                // 显示 CGI 脚本的输出
+                statusDiv.innerHTML = "<strong>升级完成！设备即将重启...</strong><br><pre style='text-align: left; background: #eee; padding: 10px; border-radius: 4px;'>" + text + "</pre>";
+                statusDiv.className = 'status-success';
+                button.innerText = '升级完成';
+            })
+            .catch(error => {
+                statusDiv.innerText = '升级失败: 'Exiting...';
+            });
+        });
+    </script>
+</body>
+</html>
+
+
