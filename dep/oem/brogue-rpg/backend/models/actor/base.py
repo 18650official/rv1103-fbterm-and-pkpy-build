@@ -1,16 +1,11 @@
 from dataclasses import dataclass
-from typing import Protocol, TYPE_CHECKING
+from typing import Protocol, TYPE_CHECKING, Literal
 from vmath import vec2i
 
-from backend.asyncio import *
-
-from ..stats import Stats
+from ..valuesys.stats import Stats
 from ..affix import AffixGroup, Trigger
 from ..buff import Buff
-
-
-if TYPE_CHECKING:
-    from backend.battle.attack import IWeapon
+from ..valuesys import ActorType
 
 PRIORITY_VFX = 100          # visual effects take priority
 PRIORITY_HERO = 0           # positive is before hero, negative after
@@ -26,13 +21,17 @@ class TurnBasedInfo:
 
 class TurnBasedActor(Protocol):
     tb_info: TurnBasedInfo
-    def wait_for_command(self) -> Task | Future[Task]: ...
+    def act(self, context: dict) -> Future[float]: ...
+
 
 class Actor:
     def __init__(self):
         self.tb_info = TurnBasedInfo()
+        self.type: ActorType = ActorType.from_key('humanioid')
 
-        self.stats = Stats()
+        self.base_stats = Stats()
+        self.stats = self.base_stats.copy()
+
         self.buffs = []            # type: list[Buff]
         self.talents = AffixGroup()
 
@@ -47,23 +46,23 @@ class Actor:
 
     @property
     def hp_vec2i(self) -> vec2i:
-        return vec2i(self.hp, self.stats.max_hp.value)
+        return vec2i(self.hp, self.stats.MaxHP)
     
     @property
     def sp_vec2i(self) -> vec2i:
-        return vec2i(self.sp, self.stats.max_sp.value)
+        return vec2i(self.sp, self.stats.MaxSP)
 
     def add_hp(self, value: int) -> None:
         value = self.hp + value
         if value < 0:
             value = 0
-        self.hp = min(value, self.stats.max_hp.value)
+        self.hp = min(value, self.stats.MaxHP)
 
     def add_sp(self, value: int) -> None:
         value = self.sp + value
         if value < 0:
             value = 0
-        self.sp = min(value, self.stats.max_sp.value)
+        self.sp = min(value, self.stats.MaxSP)
     
     @property
     def is_hero(self) -> bool:
@@ -77,26 +76,19 @@ class Actor:
     def char(self) -> str:
         raise NotImplementedError(type(self))
     
-    @property
-    def normal_attack(self) -> IWeapon | None:
-        raise NotImplementedError(type(self))
-    
     def face_direction(self, delta: vec2i) -> None:
         if delta.x != 0 and delta.y != 0:
             delta = delta.with_y(0)
         self.facing = delta
-
-    def interact(self, actor: 'Actor') -> Task | None:
-        return
     
-    def wait_for_command(self) -> Task | Future[Task]:
+    def act(self, context: dict) -> Future[float]:
         raise NotImplementedError(type(self))
     
     def update_stats(self):
-        self.stats.reset()
+        self.stats = self.base_stats.copy()
         for buff in self.buffs:
-            buff.affixes.apply_modifiers(self.stats, 'from_buff')
-        self.talents.apply_modifiers(self.stats, 'from_talent')
+            buff.affixes.apply_modifiers(self.stats)
+        self.talents.apply_modifiers(self.stats)
 
     def collect_triggers(self):
         triggers: list[Trigger] = []

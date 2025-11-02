@@ -1,1 +1,1 @@
-from .region import build_region
+from .world import build_world

@@ -39,28 +39,24 @@ class EquipmentsPage(Page):
         width = io.config.width
         e = self.equipments
 
-        # weapon
+        children.append(ui.Text("[头部]"))
+        children.append(self._item(e.headgear, width))
+        children.append(ui.Text("[身体]"))
+        children.append(self._item(e.armor, width))
         children.append(ui.Text("[武器]"))
         children.append(self._item(e.weapon, width))
 
-        # armor
-        children.append(ui.Text("[护甲]"))
-        children.append(self._item(e.armor, width))
-
-        # headgear
-        children.append(ui.Text("[头饰]"))
-        children.append(self._item(e.headgear, width))
-
         # accessory
+        children.append(ui.Newline())
         children.append(ui.Text("[饰品]"))
         for accessory in e.accessories:
             children.append(self._item(accessory, width))
-        children.append(ui.Newline())
 
-        # artifact
-        children.append(ui.Text("[神器]"))
-        for artifact in e.artifacts:
-            children.append(self._item(artifact, width))
+        # wand
+        children.append(ui.Newline())
+        children.append(ui.Text("[法杖]"))
+        for wand in e.wands:
+            children.append(self._item(wand, width))
 
         return ui.VStack([
             self.common_header(io),

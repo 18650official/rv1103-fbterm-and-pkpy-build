@@ -1,9 +1,11 @@
 from array2d import *
 from vmath import *
-from frontend.renderer import ansi_bg, ansi_fg
-from frontend.platform import clear_screen
+
 from typing import Literal
 import random
+
+from backend.platform import clear_screen
+from frontend.renderer import ansi_bg, ansi_fg
 
 # 基于读档的回溯通用型更强，可以存储多个解，而普通回溯只能维持一个解
 # 每次迭代，注册的agent每人行动一次（单个agent不能单独回档了）

@@ -18,6 +18,7 @@ args = [
     '-DPK_BUILD_STATIC_MAIN=ON',
     '-DPK_ENABLE_DETERMINISM=ON',
     '-DPK_ENABLE_WATCHDOG=ON',
+    '-DPK_ENABLE_MIMALLOC=OFF',
 ]
 
 run(' '.join(args))

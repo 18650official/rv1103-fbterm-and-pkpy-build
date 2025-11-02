@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from backend.models import Actor
-    from backend.models.affix import Trigger
+    from backend.models.affix import Trigger, StopEventPropagation
 
 class EventDispatcher:
     triggers: list[Trigger]
@@ -28,9 +28,10 @@ class EventDispatcher:
         triggers.sort(key=lambda t: -t.priority)
 
         for trigger in triggers:
-            if trigger.check(context):
-                if trigger(context):
-                    break
+            try:
+                trigger(context)
+            except StopEventPropagation:
+                break
     
     def send(self, actor: Actor, event: str, params):
         context = {
@@ -44,6 +45,7 @@ class EventDispatcher:
         triggers.sort(key=lambda t: -t.priority)
         
         for trigger in triggers:
-            if trigger.check(context):
-                if trigger(context):
-                    break
+            try:
+                trigger(context)
+            except StopEventPropagation:
+                break

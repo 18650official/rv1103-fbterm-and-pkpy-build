@@ -1,4 +1,3 @@
-from backend.asyncio import Task
 from frontend.routes.base import Page
 
 from .inventory import InventoryPage
@@ -10,7 +9,7 @@ from .stats import StatsPage
 
 from .base import TabController
 
-class TabPage(Page[Task]):
+class TabPage(Page):
     def __init__(self):
         self.controller = TabController()
         self.controller.initialize(

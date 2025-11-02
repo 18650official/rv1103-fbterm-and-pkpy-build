@@ -1,5 +1,5 @@
-from typing import Literal, overload
-from backend.battle.damage import DamageFlow
+from typing import Literal, overload, TypedDict
+from backend.battle.damage import DamageInfo
 from backend.models.actor import Actor
 from backend.models.affix import Trigger
 
@@ -9,10 +9,15 @@ Event = Literal[
 ]
 
 LocalEvent = Literal[
-    'on_pre_hit',
     'on_post_hit',
     'on_death_hit',
 ]
+
+class DealDamageEventParams(TypedDict):
+    src: Actor
+    dst: Actor
+    dmg: int
+    dmg_info: DamageInfo
 
 class EventDispatcher:
     @overload
@@ -21,10 +26,8 @@ class EventDispatcher:
     def broadcast(self, event: Literal['on_hero_attack'], params: None): ...
 
     @overload
-    def send(self, actor: Actor, event: Literal['on_pre_hit'], params: DamageFlow): ...
+    def send(self, actor: Actor, event: Literal['on_post_hit'], params: DealDamageEventParams): ...
     @overload
-    def send(self, actor: Actor, event: Literal['on_post_hit'], params: DamageFlow): ...
-    @overload
-    def send(self, actor: Actor, event: Literal['on_death_hit'], params: DamageFlow): ...
+    def send(self, actor: Actor, event: Literal['on_death_hit'], params: DealDamageEventParams): ...
 
     def add_trigger(self, trigger: Trigger) -> None: ...

@@ -1,91 +1,82 @@
-from typing import TYPE_CHECKING, Literal, Self
-
-if TYPE_CHECKING:
-    from backend.asyncio import Task
-    from backend.models.event import Event, LocalEvent
-    from .stats import Stats, FieldCpnt
-
 from .expr import Expr
+from .effect import Effect
 
-
-class Affix:
+class StopEventPropagation(Exception):
     pass
 
-
-class Modifier(Affix):
-    def __init__(self, path: str, value: int):
-        self.path = path
-        self.value = value
-
-    def __call__(self, stats: Stats, cpnt: FieldCpnt) -> None:
-        exec(f"_0.{self.path}.{cpnt} += _1", {'_0': stats, '_1': self.value})
-
-    def __repr__(self) -> str:
-        return f'Modifier({self.path!r}, {self.value!r})'
-
-
-class Trigger(Affix):
-    def __init__(self, event: Event | LocalEvent, condition: Expr[bool] | None = None, priority: int = 0):
+class Trigger:
+    def __init__(self, event: str, priority: int, effect: Effect):
         self.event = event
-        self.condition = condition
         self.priority = priority
+        self.effect = effect
 
-    def check(self, context: dict) -> bool:
-        assert context['event'] == self.event
-        if self.condition is None:
-            return True
-        return self.condition(context)
-
-    def __call__(self, context: dict) -> bool | None:
+    def __call__(self, context: dict):
+        self.effect(context)
+    
+    def render_desc(self, context: dict) -> str:
         raise NotImplementedError
 
 
-class MethodCall:
-    def __init__(self, target: Expr, method: str, *args: Expr):
-        self.target = target
-        self.method = method
-        self.args = args
+class Modifier:
+    def __init__(self, src: str, v):
+        self.src = src
+        self.v = v
 
-    def __call__(self, context: dict):
-        obj = self.target(context)
-        method = getattr(obj, self.method)
-        method(*[arg(context) for arg in self.args])
+    def render_desc(self, context: dict) -> str:
+        raise NotImplementedError
 
-
-class MethodTrigger(Trigger):
-    def __init__(
-            self,
-            event: Event | LocalEvent,
-            method_call: MethodCall,
-            condition: Expr[bool] | None = None,
-            priority: int = 0
-            ):
-        super().__init__(event, condition, priority)
-        self.method_call = method_call
-
-    def __call__(self, context: dict):
-        self.method_call(context)
+    def apply(self, obj, context: dict):
+        v = self.v
+        if isinstance(v, Expr):
+            v = v(context)
+        exec(f'obj.{self.src}=val', {'obj': obj, 'val': v})
 
 
 class AffixGroup:
     def __init__(self):
-        self.modifiers = [] # type: list[Modifier]
-        self.triggers = []  # type: list[Trigger]
+        self.modifiers: list[Modifier] = []
+        self.triggers: list[Trigger] = []
 
-    def append(self, affix: Affix) -> None:
-        if isinstance(affix, Modifier):
-            self.modifiers.append(affix)
-        elif isinstance(affix, Trigger):
-            self.triggers.append(affix)
-        else:
-            assert False
+    @staticmethod
+    def from_config(modifiers: dict[str, object] | None, triggers: dict[str, Effect] | None) -> 'AffixGroup':
+        ag = AffixGroup()
+        if modifiers is not None:
+            for k, v in modifiers.items():
+                ag.modifiers.append(Modifier(k, v))
+        if triggers is not None:
+            for k, v in triggers.items():
+                ppos = k.find(':')
+                if ppos != -1:
+                    event, priority = k[:ppos], int(k[ppos+1:])
+                else:
+                    event, priority = k[:], 0
+                assert isinstance(v, Effect)
+                trigger = Trigger(event, priority, v)
+                ag.triggers.append(trigger)
+        return ag
 
-    def apply_modifiers(self, stats: Stats, cpnt: FieldCpnt) -> None:
-        for m in self.modifiers:
-            m(stats, cpnt)
+    def render_desc(self, context: dict) -> list[str]:
+        lines = []
+        for mod in self.modifiers:
+            lines.append(mod.render_desc(context))
+        for trg in self.triggers:
+            lines.append(trg.render_desc(context))
+        return lines
+
+    def update(self, other: 'AffixGroup'):
+        self.modifiers.extend(other.modifiers)
+        self.triggers.extend(other.triggers)
+
+    def copy(self):
+        ag = AffixGroup()
+        ag.update(self)
+        return ag
+    
+    def apply_modifiers(self, obj, ctx: dict | None = None) -> None:
+        if ctx is None:
+            ctx = {}
+        for mod in self.modifiers:
+            mod.apply(obj, ctx)
 
     def __bool__(self) -> bool:
         return bool(self.modifiers) or bool(self.triggers)
-
-
-__all__ = ['Affix', 'Modifier', 'Trigger', 'AffixGroup', 'MethodTrigger', 'MethodCall']

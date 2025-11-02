@@ -69,4 +69,3 @@ else
 fi
 
 echo "Update process finished."
-

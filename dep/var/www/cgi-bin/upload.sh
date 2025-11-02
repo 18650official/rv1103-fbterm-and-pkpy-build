@@ -15,8 +15,8 @@ UPLOAD_FILE_CLEAN="/tmp/firmware_fixed.tar"
 cat > $UPLOAD_FILE_DIRTY
 
 if [ ! -s "$UPLOAD_FILE_DIRTY" ]; then
-    echo "[ERROR] File not exist or empty!"
-    exit 1
+    echo "[ERROR] File not exist or empty!"
+    exit 1
 fi
 
 echo "Received: $UPLOAD_FILE_DIRTY"
@@ -26,7 +26,7 @@ echo "Cleaning uploaded file..."
 
 # 3. 【新步骤】调用 Python 脚本进行清洗
 # 假设你的 python 解释器在 /usr/bin/python
-python /usr/local/bin/fix_upload.py $UPLOAD_FILE_DIRTY $UPLOAD_FILE_CLEAN
+/usr/bin/python /usr/local/bin/fix_upload.py $UPLOAD_FILE_DIRTY $UPLOAD_FILE_CLEAN
 
 # 检查清洗是否成功
 if [ $? -ne 0 ] || [ ! -s "$UPLOAD_FILE_CLEAN" ]; then

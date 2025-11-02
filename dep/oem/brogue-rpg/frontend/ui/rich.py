@@ -11,6 +11,7 @@ _WCWIDTH_MAP = {
     'W': 2,
     'Na': 1,
     'A': 1,
+    'N': 1,
 }
 
 def wcwidth(c: str) -> int:
@@ -198,6 +199,7 @@ def textpad(text: str, width: int, align: Align = 'left', clip=True) -> str:
     return line.render()
 
 def textwrap(text: str, width: int):
+    assert width > 0
     res: list[str] = []
     for line in text.split('\n'):
         if line == '':

@@ -52,12 +52,12 @@ class VStack(_Stack):
         if self.height < 0:
             self.height = total_height
         else:
-            assert self.height == total_height
+            assert (self.height == total_height), f"{self.height} != {total_height}"
 
     def render(self) -> list[str]:
         assert self.width > 0 and self.height > 0
         lines = []
         for child in self.children:
             lines.extend(child.render())
-        assert len(lines) == self.height
+        assert len(lines) == self.height, f'{len(lines)} != {self.height}'
         return lines

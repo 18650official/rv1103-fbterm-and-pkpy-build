@@ -37,14 +37,14 @@ def extract_file_from_multipart(input_path, output_path):
         if start_index == -1:
             print("Python Error: Could not find end of headers (no \r\n\r\n found).")
             sys.exit(1)
-
+        
         # 数据的实际开头在 \r\n\r\n 之后
         start_index += len(header_end_marker)
 
         # 4. 找到二进制数据的 *结束* 位置
         # 它位于下一个 boundary 字符串 *之前*
         end_index = data.find(boundary, start_index)
-
+        
         if end_index == -1:
             print(f"Python Error: Could not find end boundary.")
             sys.exit(1)
@@ -63,7 +63,7 @@ def extract_file_from_multipart(input_path, output_path):
         # 7. 将干净的数据以二进制模式(wb)写入新文件
         with open(output_path, 'wb') as f_out:
             f_out.write(binary_content)
-
+            
         print(f"Python: Successfully extracted {len(binary_content)} bytes to {output_path}")
 
     except Exception as e:
@@ -76,12 +76,12 @@ if __name__ == "__main__":
         # 确保传入了2个参数: <input_file> 和 <output_file>
         print(f"Usage: {sys.argv[0]} <input_file> <output_file>")
         sys.exit(1)
-
+        
     input_file = sys.argv[1]
     output_file = sys.argv[2]
-
+    
     if not os.path.exists(input_file):
         print(f"Error: Input file not found: {input_file}")
         sys.exit(1)
-
+        
     extract_file_from_multipart(input_file, output_file)

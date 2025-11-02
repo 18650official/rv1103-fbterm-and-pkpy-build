@@ -3,7 +3,7 @@
 # S99analogkeypad: Start/Stop the analog keypad daemon
 #
 
-NAME=analog_keypad
+NAME=i2c_keypad
 DAEMON=/usr/bin/$NAME
 PIDFILE=/var/run/$NAME.pid
 

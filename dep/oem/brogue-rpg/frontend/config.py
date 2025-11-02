@@ -2,7 +2,7 @@ from vmath import vec2i
 
 class Config:
     def __init__(self):
-        self.body_extent = vec2i(10, 6)
+        self.body_extent = vec2i(9, 6)
         self.body_size = self.body_extent * 2 + vec2i.ONE
         self.body_width = self.body_size.x
         self.body_height = self.body_size.y

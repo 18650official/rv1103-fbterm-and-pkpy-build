@@ -1,8 +1,7 @@
 from typing import Any, Generator
 from vmath import rgb
-from frontend.i18n import string
 
-from frontend.platform import VirtualKey
+from backend.platform import VirtualKey
 from frontend import ui
 
 from ..base import Page
@@ -18,12 +17,11 @@ class StartMenuPage(Page):
     def __init__(self):
         self.cursor = 0
         self.buttons = [
-            string('New Game', '新游戏'),
-            string('Continue', '继续游戏'),
-            string('Level Editor', '关卡编辑器'),
-            string('Settings', '设置'),
-            string('Credit', '关于'),
-            string('Quit', '退出游戏')
+            tr('ui.startmenu.new_game'),
+            tr('ui.startmenu.continue'),
+            tr('ui.startmenu.settings'),
+            tr('ui.startmenu.credit'),
+            tr('ui.startmenu.quit'),
         ]
 
     def __call__(self, io):
@@ -71,6 +69,8 @@ class StartMenuPage(Page):
                 height=len(self.buttons) + 2,
             )
         )
+
+        children.append(ui.Newline())
         children.append(ui.HDivider())
         return ui.Column(children, io.config.width)
 

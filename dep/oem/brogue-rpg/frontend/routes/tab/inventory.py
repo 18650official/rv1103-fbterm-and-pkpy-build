@@ -1,9 +1,8 @@
 from vmath import vec2i
 from typing import TypeVar
 from backend.schema.inventory import ItemSlot
-from backend.asyncio import *
 
-from frontend.platform import VirtualKey
+from backend.platform import VirtualKey
 from frontend.routes.base import Page
 from frontend import ui
 
@@ -30,7 +29,7 @@ class InventoryBase[T](Page[T]):
         self.cursor = (self.cursor + delta) % length
     
     def build_item(self, slot: ItemSlot, width: int):
-        prefix = f'[{(slot.index + 1):02}]'
+        prefix = f'{(slot.index + 1):02}|'
         bg = ui.theme.selected_bg if slot.index == self.cursor else None
         if slot.item is None:
             text = ui.richtext(
@@ -47,13 +46,22 @@ class InventoryBase[T](Page[T]):
             )
         return ui.Text(text)
     
+    def render_item_desc(self, width: int):
+        slot = self.selected_slot
+        if slot.item is None:
+            text = ''
+        else:
+            item = slot.item
+            text = item.render_desc()
+        return ui.MultiLineText(text, width=width, height=2)
+    
     def __call__(self, io):
         body = ui.ListView(
             [
                 self.build_item(slot, io.config.width)
                 for slot in self.inventory.items
             ],
-            height=io.config.body_height_ex - 1,
+            height=io.config.body_height_ex - 4,
             scroll_index=self.cursor
         )
         return ui.VStack([
@@ -61,12 +69,14 @@ class InventoryBase[T](Page[T]):
             ui.HDivider(),
             tab_title("背包界面", io.input),
             body,
-            ui.HDivider(),
+            ui.HDivider(),                          # 1
+            self.render_item_desc(io.config.width), # 2
+            ui.HDivider(),                          # 1
             self.common_footer(io),
         ], width=io.config.width)
 
 
-class InventoryPage(InventoryBase[Task]):
+class InventoryPage(InventoryBase):
     def __init__(self, controller: TabController, cursor: int = 0):
         super().__init__(cursor)
         self.controller = controller
@@ -83,34 +93,19 @@ class InventoryPage(InventoryBase[Task]):
                     continue
                 else:
                     item = slot.item
-                    game.message("选中物品")
+                    game.log("选中物品")
                     title = f'{item.name}'
-                    desc = title + '\n\n' + item.render_desc()
+                    desc = item.render_desc()
                     actions = item.get_actions()
-                    options = [Option(str(op.name), desc, True) for op in actions]
-                    index = yield from io.choices(options)
+                    options = [
+                        Option(str(op.name), True)
+                        for op in actions
+                    ]
+                    index = yield from io.choices(options, title, desc)
                     if index is not None:
-                        game.message(f"选择了{options[index].name}")
+                        game.log(f"选择了{options[index].name}")
                         return actions[index](game.hero, item)
                     else:
-                        game.message("你取消了选择")
+                        game.log("你取消了选择")
             elif self.controller.test(state):
-                break
-
-
-class InventoryChoicePage(InventoryBase[ItemSlot | None]):
-    def __init__(self, cursor: int, filter=None):
-        super().__init__(cursor)
-        self.filter = filter or (lambda slot: True)
-
-    def poll(self, io):
-        while True:
-            state, axis = yield from io.input.wait_for_input()
-            if axis != vec2i.ZERO:
-                self.move_cursor(axis.y)
-            elif state[VirtualKey.OK]:
-                slot = self.selected_slot
-                if self.filter(slot):
-                    return slot
-            elif state[VirtualKey.ESCAPE]:
                 break

@@ -1,14 +1,12 @@
-from backend.asyncio import Task
-
-from frontend.platform import VirtualKey, Input
+from backend.platform import VirtualKey, Input
 from frontend import ui
 from frontend.routes.base import Page
 
 class TabController:
-    pages: tuple[Page[Task], ...]
+    pages: tuple[Page, ...]
     page_index: int | None
 
-    def initialize(self, *pages: Page[Task]):
+    def initialize(self, *pages: Page):
         self.pages = pages
         self.page_index = 0
 
@@ -22,21 +20,21 @@ class TabController:
         self.page_index = (self.page_index + offset) % len(self.pages)
 
     def test(self, state: list[bool]):
-        if state[VirtualKey.GO_PREV]:
+        if state[VirtualKey.F1]:
             self.go_forward(-1)
             return True
-        elif state[VirtualKey.GO_NEXT]:
+        elif state[VirtualKey.F2]:
             self.go_forward(1)
             return True
-        elif state[VirtualKey.ESCAPE]:
+        elif state[VirtualKey.F3]:
             self.page_index = None
             return True
         return False
     
 
 def tab_title(text: str, input: Input):
-    prev = input.vkey_name(VirtualKey.GO_PREV)
-    next = input.vkey_name(VirtualKey.GO_NEXT)
+    prev = input.vkey_name(VirtualKey.F1)
+    next = input.vkey_name(VirtualKey.F2)
     return ui.Row([
         f'◀ {prev}',
         ...,

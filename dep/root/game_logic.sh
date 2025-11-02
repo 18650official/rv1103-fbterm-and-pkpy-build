@@ -11,8 +11,7 @@
 echo "Starting Main Boot Tasks..."
 sleep 0.3
 
-# 1. Auto update
-# Removed, the new version use ota to update
+# 1.Auto update (Legacy)
 
 # 2. Start Color test
 /usr/bin/color_test_c

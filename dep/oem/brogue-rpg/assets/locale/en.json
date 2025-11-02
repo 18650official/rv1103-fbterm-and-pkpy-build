@@ -1,0 +1,14 @@
+{
+  "desc.deal_{}_damage": "Deal {} damage.",
+  "desc.restore_{}_hp": "Restore {} HP.",
+  "item.short_sword": "Short Sword",
+  "item.small_healing_potion": "Small Healing Potion",
+  "ui.drink": "Drink",
+  "ui.drop": "Drop",
+  "ui.startmenu.continue": "Continue",
+  "ui.startmenu.credit": "Credit",
+  "ui.startmenu.new_game": "New Game",
+  "ui.startmenu.quit": "Quit",
+  "ui.startmenu.settings": "Settings",
+  "ui.throw": "Throw"
+}

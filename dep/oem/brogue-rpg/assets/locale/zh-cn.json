@@ -1,0 +1,13 @@
+{
+  "desc.deal_{}_damage": "造成 {} 点伤害。",
+  "desc.restore_{}_hp": "恢复 {} 点生命值。",
+  "item.short_sword": "短剑",
+  "item.small_healing_potion": "小型治疗药水",
+  "ui.drink": "喝下",
+  "ui.drop": "丢弃",
+  "ui.startmenu.continue": "继续游戏",
+  "ui.startmenu.credit": "关于我们",
+  "ui.startmenu.new_game": "新游戏",
+  "ui.startmenu.quit": "退出游戏",
+  "ui.startmenu.settings": "设置"
+}

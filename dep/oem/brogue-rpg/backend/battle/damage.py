@@ -1,122 +1,98 @@
 from typing import Literal, TYPE_CHECKING
 from random import Random
-from dataclasses import dataclass
+from vmath import vec2i
 
 if TYPE_CHECKING:
-    from backend.models import Actor
-    from backend.game import Game
+    from backend.models.event import DealDamageEventParams
+
+from backend.models import Actor, DamageType, DamageSource, DamageMethod, ValueFix, DamageInfo
 
 
-DamageType = Literal[
-    'normal',
-    'fire',
-    'cold',
-    'lightning',
-    'poison',
-    'curse',
-]
-
-ELEMENTAL_DAMAGE_TYPES = ('fire', 'cold', 'lightning', 'poison')
-
-DamageSource = Literal[
-    'normal',           # 普通攻击
-    'environmental',    # 环境
-    'spell',            # 法术
-    'others',           # 其他
-]
-
-@dataclass
-class DamageInfo:
-    type: DamageType = 'normal'
-    source: DamageSource = 'normal'
-    is_melee: bool = False
-    is_projectile: bool = False
-
-    @property
-    def is_elemental(self) -> bool:
-        return self.type in ELEMENTAL_DAMAGE_TYPES
+DamageOutcome = Literal['miss', 'block', 'hit', 'death_hit']
 
 
+def damage_total_fix(dmg_info: DamageInfo, actor: 'Actor'):
+    fix = ValueFix()
+    fix.merge(actor.base_stats.dmg_types[dmg_info.type])
+    fix.merge(actor.base_stats.dmg_sources[dmg_info.source])
+    fix.merge(actor.base_stats.dmg_methods[dmg_info.method])
+    return fix
 
-DamageOutcome = Literal[
-    'miss',
-    'block',
-    'hit',
-    'death_hit',
-]
 
-class DamageFlow:
-    def __init__(self, src: Actor, dst: Actor, dmg: int, dmg_info: DamageInfo, rand: Random | None = None):
-        self.src = src
-        self.dst = dst
-        self.dmg = dmg
-        self.dmg_info = dmg_info
-        self.rand = rand or Random()
-        self.outcome = None     # type: DamageOutcome | None
+def deal_damage(
+        rand: Random,
+        src: 'Actor',
+        dst: 'Actor',
+        dmg: int,
+        dmg_info: DamageInfo,
+        src_pos: vec2i | None = None,
+        base_hit: int = 0) -> tuple[DamageOutcome, int]:
+    game = current_game()
+    outcome, dmg = deal_damage_impl(rand, src, dst, dmg, dmg_info, src_pos, base_hit)
+    match outcome:
+        case 'miss':
+            game.log(f'{src.char}攻击{dst.char}失败，未命中！')
+        case 'block':
+            game.log(f'{src.char}攻击{dst.char}被格挡！')
+        case 'hit':
+            game.log(f'{src.char}攻击{dst.char}，造成{dmg}点伤害！')
+        case 'death_hit':
+            game.log(f'{src.char}攻击{dst.char}，造成{dmg}点伤害，击杀了对方！')
+        case _:
+            assert False, outcome
+    return outcome, dmg
 
-    def reduce_dmg_fixed(self, dmg: int, value: int) -> int:
-        return max(0, dmg - value)
+def deal_damage_impl(
+        rand: Random,
+        src: 'Actor',
+        dst: 'Actor',
+        dmg: int,
+        dmg_info: DamageInfo,
+        src_pos: vec2i | None = None,
+        base_hit: int = 0) -> tuple[DamageOutcome, int]:
+    game = current_game()
+    if dmg_info.source != 'debuff':
+        # 命中判定
+        src_hit = src.stats.Hit + base_hit
+        dst_dodge = dst.stats.Dodge
 
-    def reduce_dmg_percent(self, dmg: int, percent: int) -> int:
-        percent = min(percent, 100)
-        return dmg * (100 - percent) // 100
+        if dmg_info.method == 'projectile':
+            # 远程攻击距离太近降低命中
+            delta = (dst.pos - (src_pos or src.pos))
+            distance = max(abs(delta.x), abs(delta.y))
+            if distance == 2:
+                src_hit -= 1
+            elif distance == 1:
+                src_hit -= 2
 
-    def roll(self, chance: int) -> bool:
-        return self.rand.randint(0, 100) < chance
-
-    def __call__(self):
-        game = current_game()
-        self.call_impl(game)
-        match self.outcome:
-            case 'miss':
-                game.message(f'{self.src.char}攻击{self.dst.char}失败，未命中！')
-            case 'block':
-                game.message(f'{self.src.char}攻击{self.dst.char}被格挡！')
-            case 'hit':
-                game.message(f'{self.src.char}攻击{self.dst.char}，造成{self.dmg}点伤害！')
-            case 'death_hit':
-                game.message(f'{self.src.char}攻击{self.dst.char}，造成{self.dmg}点伤害，击杀了对方！')
-            case _:
-                assert False, self.outcome
-
-    def call_impl(self, game: 'Game'):
-        if self.roll(self.dst.stats.dodge.value):
-            # 闪避判定
-            self.outcome = 'hit'
-            return
+        hit_roll = rand.randint(1, 20)  # 1d20
+        if hit_roll == 1:
+            return 'miss', 0
+        if hit_roll != 20 and hit_roll + src_hit <= dst_dodge:
+            return 'miss', 0
         
-        game.events.send(self.dst, 'on_pre_hit', self)
-        if self.outcome is not None:
-            return
-        
-        if self.dmg_info.is_projectile:
-            # 格挡判定
-            if self.roll(self.dst.stats.block.value):
-                self.outcome = 'block'
-                return
+        # 格挡判定（近战和投射物攻击）
+        if dmg_info.method == 'melee' or dmg_info.method == 'projectile':
+            if dst.stats.Block > rand.randint(0, 100):
+                return 'block', 0
+            
+    # 计算攻方伤害加成
+    dmg = max(0, damage_total_fix(dmg_info, src).apply_inc(dmg))
+    # 计算守方伤害减免
+    dmg = max(0, damage_total_fix(dmg_info, dst).apply_dec(dmg))
 
-        # 伤害减免
-        defense = self.dst.stats.defense.value
-        if self.dmg_info.type == 'normal':
-            self.dmg = self.reduce_dmg_fixed(self.dmg, defense)
-        elif self.dmg_info.type in ELEMENTAL_DAMAGE_TYPES:
-            if self.dmg_info.type == 'fire' and self.dmg_info.source == 'environmental':
-                self.dmg = self.reduce_dmg_percent(self.dmg, self.dst.stats.env_fire_resist.value)
-            if self.dmg_info.type == 'cold' and self.dmg_info.source == 'environmental':
-                self.dmg = self.reduce_dmg_percent(self.dmg, self.dst.stats.env_cold_resist.value)
-            self.dmg = self.reduce_dmg_percent(self.dmg, self.dst.stats.elemental_resist.value)
-        elif self.dmg_info.type == 'curse':
-            self.dmg = self.reduce_dmg_percent(self.dmg, self.dst.stats.curse_resist.value)
-        else:
-            assert False
+    dst.add_hp(-dmg)
+    event_params: DealDamageEventParams = {
+        'src': src,
+        'dst': dst,
+        'dmg': dmg,
+        'dmg_info': dmg_info,
+    }
 
-        assert self.dmg >= 0
-        self.dst.add_hp(-self.dmg)
-
-        if self.dst.hp > 0:
-            game.events.send(self.dst, 'on_post_hit', self)
-            self.outcome = 'hit'
-        else:
-            current_world().destroy_actor(self.dst)
-            game.events.send(self.dst, 'on_death_hit', self)
-            self.outcome = 'death_hit'
+    if dst.hp > 0:
+        game.events.send(dst, 'on_post_hit', event_params)
+        return 'hit', dmg
+    else:
+        game.world.destroy_actor(dst)
+        game.events.send(dst, 'on_death_hit', event_params)
+        return 'death_hit', dmg

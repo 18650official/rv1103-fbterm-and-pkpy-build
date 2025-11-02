@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# S01backlight
+# Controls the screen backlight on system start/stop.
+# Assumes /usr/bin/bl_ctl exists.
+#
+
+CTL_TOOL="/usr/bin/bl_ctl"
+
+# Check if the control tool exists and is executable
+if [ ! -x "$CTL_TOOL" ]; then
+    echo "Error: $CTL_TOOL not found or not executable."
+    exit 1
+fi
+
+# Handle arguments
+case "$1" in
+    start)
+        echo "Starting Backlight (ON)"
+        $CTL_TOOL 1 &
+        ;;
+    stop)
+        echo "Stopping Backlight (OFF)"
+        $CTL_TOOL 0 &
+        ;;
+    restart)
+        echo "Restarting Backlight"
+        $CTL_TOOL 0 &
+        sleep 1 # Ensure stable GPIO state
+        $CTL_TOOL 1 &
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+
+exit 0
+
+

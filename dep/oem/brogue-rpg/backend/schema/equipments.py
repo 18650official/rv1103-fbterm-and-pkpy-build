@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from backend.models.item import Item
+    from backend.models.item import *
 
 
-class GearSlot:
-    item: Item | None
+class GearSlot[T: EquippableItem]:
+    item: T | None
     index: int
 
     def __init__(self, index: int = 0):
@@ -15,33 +15,24 @@ class GearSlot:
     def is_empty(self) -> bool:
         return self.item is None
     
-    def set(self, item: Item) -> None:
+    def set(self, item: T) -> None:
         self.item = item
     
 
 class Equipments:
     def __init__(self):
-        self.slots = [GearSlot(i) for i in range(9)]
-
-        self.weapon = self.slots[0]    # 武器
-        self.armor = self.slots[1]     # 护甲
-        self.headgear = self.slots[2]
-        self.accessories = [
-            self.slots[3], # 饰品1
-            self.slots[4], # 饰品2
-        ]
-        self.artifacts = [
-            self.slots[5], # 神器1
-            self.slots[6], # 神器2
-            self.slots[7], # 神器3
-            self.slots[8], # 神器4
-        ]
+        self.headgear = GearSlot['Headgear'](0)
+        self.armor = GearSlot['Armor'](1)
+        self.weapon = GearSlot['Weapon'](2)
+        self.accessories = [GearSlot['Accessory'](i) for i in range(3, 7)]
+        self.wands = [GearSlot['Wand'](i) for i in range(7, 10)]
 
     def __iter__(self):
-        return iter(self.slots)
+        yield self.headgear
+        yield self.armor
+        yield self.weapon
+        yield from self.accessories
+        yield from self.wands
 
     def __len__(self):
-        return len(self.slots)
-    
-    def __getitem__(self, index: int) -> GearSlot:
-        return self.slots[index]
+        return 3 + len(self.accessories) + len(self.wands)

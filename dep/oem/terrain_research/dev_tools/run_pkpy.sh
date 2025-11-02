@@ -1,1 +1,0 @@
-./main test2.py

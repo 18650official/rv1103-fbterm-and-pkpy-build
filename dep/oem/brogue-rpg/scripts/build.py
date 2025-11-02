@@ -2,7 +2,7 @@ from datetime import datetime
 import os
 import json
 
-targets = ['backend/', 'dungeon/', 'frontend/', 'driver.py', 'main.py']
+targets = ['assets/', 'backend/', 'dungeon/', 'frontend/', 'driver.py', 'main.py']
 now = datetime.now().strftime('%Y%m%d%H%M%S')
 filename = f'brogue-rpg-{now}.json'
 

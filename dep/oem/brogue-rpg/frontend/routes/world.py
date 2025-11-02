@@ -70,9 +70,8 @@ class WorldPage(Page):
 
     def render_world(self, io: ConsoleIO):
         game = current_game()
-        hero = game.hero
         width, height = io.config.body_size
-        zone = game.world.a.view_rect(
+        zone = game.world.tiles.view_rect(
             game.hero.pos - io.config.body_extent,
             width,
             height
@@ -81,24 +80,22 @@ class WorldPage(Page):
         m = array2d[str](zone.width, zone.height, default='　')
         m_bg = array2d[color32 | None](zone.width, zone.height, default=None)
 
-        from backend.assets.tileset.base import get_sprite
-        from backend.world.tile import TileData
+        from backend.world.schema.tile import Tile
 
         # 绘制地形
-        for layer in ['tt_ground', 'tt_grass', 'tt_wall']:
-            for pos, tile in zone:
-                tt: TileData | None = getattr(tile, layer)
-                if tt is None:
+        for layer in ['t_ground', 't_floor', 't_plant', 't_block']:
+            for pos, tile_stack in zone:
+                t: Tile | None = getattr(tile_stack, layer)
+                if t is None:
                     continue
-                sprite = get_sprite(tt.tileset, tt.index)
                 # 背景色混合
-                if sprite.bg is not None:
-                    m_bg[pos] = color32.alpha_blend(sprite.bg, m_bg[pos])
+                if t.bg is not None:
+                    m_bg[pos] = color32.alpha_blend(t.bg, m_bg[pos])
                 # 前景色覆盖
-                if sprite.fg is not None:
-                    m[pos] = sprite.fg.ansi_fg(sprite.char)
+                if t.fg is not None:
+                    m[pos] = t.fg.ansi_fg(t.char)
                 else:
-                    m[pos] = sprite.char
+                    m[pos] = t.char
 
         # 绘制光标
         cursor_pos = self.cursor.position - zone.origin

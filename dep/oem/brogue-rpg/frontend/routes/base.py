@@ -15,8 +15,8 @@ class Page[T]:
                 f' ({hero.shield})' if hero.shield > 0 else None,
             ]),
             ui.Row([
-                ui.StatBarSpan('SP', io.config.bar_width, ui.theme.sp_bar_fg, hero.sp_vec2i)
-            ])
+                ui.StatBarSpan('SP', io.config.bar_width, ui.theme.sp_bar_fg, hero.sp_vec2i),
+            ]),
         ], height=2)
     
     def common_footer(self, io: ConsoleIO) -> ui.Widget:
