@@ -318,6 +318,42 @@ echo "lvgl_menu executable is installed at: ${INSTALL_DIR}/usr/bin/pico-menu"
 cd "${BUILD_DIR}"
 echo "======== lvgl_menu compilation finished. ========"
 
+# --- Compile nofrendo_nesemu_linux Submodule ---
+echo ""
+echo "======== 5.9 Compiling nofrendo_nesemu_linux (NES Emulator) ========"
+cd "${BUILD_DIR}/nofrendo_nesemu_linux"
+
+# 1. 确保子模块代码是最新的
+echo "--> Initializing and updating submodule..."
+# 这步对于刚添加的子模块是必要的，确保代码被拉取
+git submodule update --init --recursive
+
+# 2. 清理旧的编译目录
+rm -rf build
+mkdir build
+
+# 3. 编译：关键步骤是使用 -DCMAKE_TOOLCHAIN_FILE 选项
+# 强制让 CMake 使用主脚本在 Part 4 中生成的、路径正确的 $TOOLCHAIN_CMAKE_FILE
+echo "--> Compiling using auto-generated toolchain file: ${TOOLCHAIN_CMAKE_FILE}"
+cmake -B build \
+    -DCMAKE_TOOLCHAIN_FILE="${TOOLCHAIN_CMAKE_FILE}" \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr # 统一安装路径
+
+# 4. 使用 cmake --build 命令来编译（推荐方式，无需切换目录）
+echo "--> Running build..."
+cmake --build build -j$(nproc)
+
+# 5. 使用 cmake --install 命令来安装
+echo "--> Installing nofrendo executable to staging directory: ${INSTALL_DIR}"
+cmake --install build --prefix="${INSTALL_DIR}"
+echo "--> Entering directory ${BUILD_DIR}/nofrendo_nesemu_linux ..."
+cd "${BUILD_DIR}/nofrendo_nesemu_linux"
+cp  ./build/bin/nesemu ${INSTALL_DIR}/usr/bin
+
+cd "${BUILD_DIR}"
+echo "======== nofrendo_nesemu_linux compilation finished. ========"
+
 # -------------- Compile finish -------------------- #
 
 echo ""
@@ -357,6 +393,10 @@ cp -f "${BUILD_DIR}/staging/usr/bin/"* "${EXPORT_DIR}/usr/bin/"
 # Export lvgl_menu
 echo "  -> Copying pico-menu..."
 cp -f "${INSTALL_DIR}/usr/bin/pico-menu" "${EXPORT_DIR}/usr/bin/"
+
+# Export lvgl_menu
+echo "  -> Copying nesemu..."
+cp -f "${INSTALL_DIR}/usr/bin/nesemu" "${EXPORT_DIR}/usr/bin/"
 
 echo "====== Executables exported. ======"
 echo ""
