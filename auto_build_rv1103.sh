@@ -185,8 +185,8 @@ make clean &> /dev/null || true
             --disable-shared \
             --without-docbook \
             --disable-docs
-make -j$(nproc)
-make install DESTDIR="${INSTALL_DIR}"
+make -j$(nproc) SUBDIRS="lib xmlwf"
+make install DESTDIR="${INSTALL_DIR}" SUBDIRS="lib xmlwf"
 cd "${BUILD_DIR}"
 echo "======== expat compilation finished. ========"
 
@@ -394,7 +394,7 @@ cp -f "${BUILD_DIR}/staging/usr/bin/"* "${EXPORT_DIR}/usr/bin/"
 echo "  -> Copying pico-menu..."
 cp -f "${INSTALL_DIR}/usr/bin/pico-menu" "${EXPORT_DIR}/usr/bin/"
 
-# Export lvgl_menu
+# Export nesemu
 echo "  -> Copying nesemu..."
 cp -f "${INSTALL_DIR}/usr/bin/nesemu" "${EXPORT_DIR}/usr/bin/"
 
