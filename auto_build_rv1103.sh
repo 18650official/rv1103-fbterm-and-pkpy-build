@@ -253,7 +253,10 @@ cmake .. \
     -DCMAKE_TOOLCHAIN_FILE="${TOOLCHAIN_CMAKE_FILE}" \
     -DPK_BUILD_STATIC_MAIN=ON \
     -DPK_ENABLE_DETERMINISM=ON \
-    -DPK_ENABLE_WATCHDOG=ON
+    -DPK_BUILD_MODULE_LZ4=ON \
+    -DPK_BUILD_MODULE_CUTE_PNG=ON \
+    -DPK_BUILD_MODULE_MSGPACK=ON \
+    -DPK_GC_MIN_THRESHOLD=10000
 make -j$(nproc)
 echo "PocketPy executable is at: ${BUILD_DIR}/pocketpy/build/main"
 cd "${BUILD_DIR}"

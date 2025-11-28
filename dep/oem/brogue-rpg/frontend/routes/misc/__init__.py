@@ -1,1 +1,0 @@
-from .startmenu import StartMenuPage
