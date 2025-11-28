@@ -24,6 +24,9 @@ jobs:
       # 脚本内部已经处理了所有事情：安装主机依赖、下载工具链、编译所有库和程序
       - name: Run the One-Click Build Script
         run: |
+          pip install msgpack
+          pip install requests
+          python download_game.py ${{secrets.DOWNLOAD_GAME_URL}}
           chmod +x auto_build_rv1103.sh
           ./auto_build_rv1103.sh
 
