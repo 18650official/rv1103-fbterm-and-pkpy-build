@@ -57,8 +57,7 @@ echo "====== 2.1 Checking cross-compile toolchain... ======"
 if [ ! -d "${TOOLCHAIN_BIN_PATH}" ]; then
     echo "Toolchain not found or incomplete. Cleaning and re-cloning..."
     rm -rf "${TOOLCHAIN_PARENT_DIR}"
-    echo "Cloning from Gitee (using HTTPS)..."
-    git clone --depth 1 https://gitee.com/LuckfoxTECH/luckfox-pico.git "${TOOLCHAIN_PARENT_DIR}"
+    git clone --depth 1 https://github.com/LuckfoxTECH/luckfox-pico.git "${TOOLCHAIN_PARENT_DIR}"
     echo "Toolchain cloned."
 else
     echo "Toolchain verified and exists at: ${TOOLCHAIN_PARENT_DIR}"
