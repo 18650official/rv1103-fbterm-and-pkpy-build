@@ -57,8 +57,7 @@ echo "====== 2.1 Checking cross-compile toolchain... ======"
 if [ ! -d "${TOOLCHAIN_BIN_PATH}" ]; then
     echo "Toolchain not found or incomplete. Cleaning and re-cloning..."
     rm -rf "${TOOLCHAIN_PARENT_DIR}"
-    echo "Cloning from Gitee (using HTTPS)..."
-    git clone --depth 1 https://gitee.com/LuckfoxTECH/luckfox-pico.git "${TOOLCHAIN_PARENT_DIR}"
+    git clone --depth 1 https://github.com/LuckfoxTECH/luckfox-pico.git "${TOOLCHAIN_PARENT_DIR}"
     echo "Toolchain cloned."
 else
     echo "Toolchain verified and exists at: ${TOOLCHAIN_PARENT_DIR}"
@@ -253,7 +252,10 @@ cmake .. \
     -DCMAKE_TOOLCHAIN_FILE="${TOOLCHAIN_CMAKE_FILE}" \
     -DPK_BUILD_STATIC_MAIN=ON \
     -DPK_ENABLE_DETERMINISM=ON \
-    -DPK_ENABLE_WATCHDOG=ON
+    -DPK_BUILD_MODULE_LZ4=ON \
+    -DPK_BUILD_MODULE_CUTE_PNG=ON \
+    -DPK_BUILD_MODULE_MSGPACK=ON \
+    -DPK_GC_MIN_THRESHOLD=10000
 make -j$(nproc)
 echo "PocketPy executable is at: ${BUILD_DIR}/pocketpy/build/main"
 cd "${BUILD_DIR}"

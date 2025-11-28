@@ -9,4 +9,4 @@
 	url = https://github.com/18650official/lvgl_menu_for_pkpy_luckfoxpico
 [submodule "nofrendo_nesemu_linux"]
 	path = nofrendo_nesemu_linux
-	url = git@github.com:18650official/nofrendo_nesemu_linux.git
+	url = https://github.com/18650official/nofrendo_nesemu_linux.git
